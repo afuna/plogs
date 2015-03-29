@@ -17,17 +17,23 @@
       </button>
       <a class="navbar-brand" href="#">Plogs</a>
     </div>
+
+    {% if user.is_authenticated %}
+      <div class="navbar-right"><p class="navbar-text">Hi {{ user.get_shortname | default:user.get_username }}!</p></div>
+    {% else %}
     <div id="navbar" class="navbar-collapse collapse">
-      <form class="navbar-form navbar-right">
+      <form method='post' action='{% url 'login' %}' class="navbar-form navbar-right">
+        {% csrf_token %}
         <div class="form-group">
-          <input type="text" placeholder="Email" class="form-control">
+          <input type="text" placeholder="Username" name="username" class="form-control">
         </div>
         <div class="form-group">
-          <input type="password" placeholder="Password" class="form-control">
+          <input type="password" placeholder="Password" name="password" class="form-control">
         </div>
-        <button type="submit" class="btn btn-success">Sign in</button>
+        <button type="submit" class="btn btn-success">Log in</button>
       </form>
     </div><!--/.navbar-collapse -->
+    {% endif %}
   </div>
 </nav>
 

@@ -88,7 +88,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Registration
+LOGIN_REDIRECT_URL = "/"
 
+# Bootstrap theme
 BOOTSTRAP3 = {
 
     # The URL to the jQuery JavaScript file

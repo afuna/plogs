@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+
+{% block content %}
+
+<div class="row"><div class="col-sm-6 col-sm-offset-3">
+    <div class="panel panel-default">
+    <form action="" method="post" class="panel-body">
+        {% csrf_token %}
+
+        {% bootstrap_form form %}
+
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">
+            {% block form_button %}Submit{% endblock %}
+            </button>
+        {% endbuttons %}
+
+    </form>
+    </div>
+</div></div>
+{% endblock %}
