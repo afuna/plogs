@@ -42,7 +42,13 @@ module.exports = function(grunt) {
                         dest: 'main/static/assets/js'
                     }
                 ]
-            }
+            },
+            fonts: {
+                expand: true,
+                flatten: true,
+                src: 'main/src/vendor/bootstrap/dist/fonts/*',
+                dest: 'main/static/assets/fonts'
+            },
         },
 
         clean: {
@@ -67,6 +73,6 @@ module.exports = function(grunt) {
     grunt.registerTask('install', ['bower:install']);
     grunt.registerTask('dist-css', ['less:compile']);
     grunt.registerTask('dist-js', ['copy:js']);
-    grunt.registerTask('dist', ['clean:dist', 'dist-css', 'dist-js']);
+    grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js']);
     grunt.registerTask('default', ['install', 'dist']);
 };
