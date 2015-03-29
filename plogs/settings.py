@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'main',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -86,3 +87,19 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+BOOTSTRAP3 = {
+
+    # The URL to the jQuery JavaScript file
+    'jquery_url': '/static/assets/js/vendor/jquery.min.js',
+
+    # The complete URL to the Bootstrap CSS file (None means derive it from base_url)
+    'css_url': '/static/assets/css/plogs.css',
+
+    # The complete URL to the Bootstrap JavaScript file (None means derive it from base_url)
+    'javascript_url': '/static/assets/js/vendor/bootstrap.min.js',
+
+    # Set placeholder attributes to label if no placeholder is provided
+    'set_placeholder': False,
+}
