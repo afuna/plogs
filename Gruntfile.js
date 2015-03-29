@@ -20,10 +20,10 @@ module.exports = function(grunt) {
                     sourceMap: true,
                     outputSourceFiles: true,
                     sourceMapURL: '<%= pkg.name %>.css.map',
-                    sourceMapFilename: 'main/static/assets/css/<%= pkg.name %>.css.map'
+                    sourceMapFilename: 'plogs/main/static/assets/css/<%= pkg.name %>.css.map'
                 },
-                src: 'main/src/less/custom-bootstrap.less',
-                dest: 'main/static/assets/css/<%= pkg.name %>.css'
+                src: 'plogs/main/src/less/custom-bootstrap.less',
+                dest: 'plogs/main/static/assets/css/<%= pkg.name %>.css'
             }
         },
 
@@ -33,31 +33,31 @@ module.exports = function(grunt) {
                     {
                         flatten: true,
                         expand: true,
-                        src: ['main/src/vendor/bootstrap/dist/js/*', 'main/src/vendor/jquery/dist/*'],
-                        dest: 'main/static/assets/js/vendor/'
+                        src: ['plogs/main/src/vendor/bootstrap/dist/js/*', 'plogs/main/src/vendor/jquery/dist/*'],
+                        dest: 'plogs/main/static/assets/js/vendor/'
                     },
                     {
                         expand: true,
-                        src: 'main/src/js',
-                        dest: 'main/static/assets/js'
+                        src: 'plogs/main/src/js',
+                        dest: 'plogs/main/static/assets/js'
                     }
                 ]
             },
             fonts: {
                 expand: true,
                 flatten: true,
-                src: 'main/src/vendor/bootstrap/dist/fonts/*',
-                dest: 'main/static/assets/fonts'
+                src: 'plogs/main/src/vendor/bootstrap/dist/fonts/*',
+                dest: 'plogs/main/static/assets/fonts'
             },
         },
 
         clean: {
-            dist: 'main/static/assets'
+            dist: 'plogs/main/static/assets'
         },
 
         watch: {
             less: {
-                files: 'main/src/less/**/*.less',
+                files: 'plogs/main/src/less/**/*.less',
                 tasks: 'dist-css'
             }
         },
