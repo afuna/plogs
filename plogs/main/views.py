@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.core.urlresolvers import reverse
 from django.contrib.auth import forms, login, authenticate
 from django.http import HttpResponseRedirect
 
@@ -13,8 +14,8 @@ def signup(request):
             new_user = form.save()
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password1'])
             login(request, user)
-            return HttpResponseRedirect("/plane/new")
 
+            return redirect(reverse('planes:new'))
     else:
         form = forms.UserCreationForm()
 
