@@ -57,7 +57,7 @@ class BuildLog(models.Model):
     partner = models.ForeignKey(Partner, null=True, blank=True)
 
     date = models.DateField()
-    duration = models.PositiveSmallIntegerField('hours', blank=True)
+    duration = models.DecimalField('hours', blank=True, max_digits=5, decimal_places=2)
 
     reference = models.CharField('manual section', max_length=255, blank=True)
     parts = models.CharField('part numbers', max_length=255, blank=True)
