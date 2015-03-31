@@ -4,7 +4,8 @@
   "description": "Generate dist version of CSS / JS for plogs",
   "main": "Gruntfile.js",
   "dependencies": {
-    "grunt": "^0.4.5"
+    "grunt": "^0.4.5",
+    "grunt-cli": "^0.1.13"
   },
   "devDependencies": {
     "grunt-bower-task": "^0.4.0",
