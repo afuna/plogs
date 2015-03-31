@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.dispatch import Signal
 from .models import Plane, Engine, Prop
 from .forms import SimplePlaneForm
-
-from plogs.buildlogs.models import Project
+from .signals import post_create
 
 @login_required
 def new(request):
@@ -22,9 +22,7 @@ def new(request):
                           prop = prop)
             plane.save()
 
-            # FIXME: this is not the best place to do this, but it'll do for now
-            project = Project(plane=plane)
-            project.save()
+            post_create.send(sender=Plane, plane=plane)
 
             return redirect('frontpage')
     else:
