@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from .models import Plane, Engine, Prop
 from .forms import SimplePlaneForm
 
+from plogs.buildlogs.models import Project
+
 @login_required
 def new(request):
     if request.method == "POST":
@@ -19,6 +21,10 @@ def new(request):
                           engine = engine,
                           prop = prop)
             plane.save()
+
+            # FIXME: this is not the best place to do this, but it'll do for now
+            project = Project(plane=plane)
+            project.save()
 
             return redirect('frontpage')
     else:

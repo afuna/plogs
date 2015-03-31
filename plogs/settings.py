@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'plogs.main',
     'plogs.planes',
+    'plogs.buildlogs',
 )
 
 MIDDLEWARE_CLASSES = (

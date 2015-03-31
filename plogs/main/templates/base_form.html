@@ -4,14 +4,14 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-<form method="POST" action="{% url form_url %}">
+<form method="POST" action="{% block form_url %}{% url form_url %}{% endblock %}">
     {% csrf_token %}
 
     {% bootstrap_form form %}
 
     {% buttons %}
     <button type="submit" class="btn btn-primary">
-    {{ form_button }}
+    {% block form_button %}{{ form_button }}{% endblock %}
     </button>
 {% endbuttons %}
 

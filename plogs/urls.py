@@ -9,4 +9,5 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('plogs.main.urls')),
     url(r'^plane/', include('plogs.planes.urls', namespace='planes', app_name='planes')),
+    url(r'^build/', include('plogs.buildlogs.urls', namespace='build', app_name='buildlogs')),
 )

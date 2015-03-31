@@ -1,0 +1,12 @@
+{% extends 'base_form.html' %}
+
+{% block title %}Log Build Session{% endblock %}
+{% block form_button %}Log{% endblock %}
+
+{% block form_url %}
+{% if form_url == "build:edit" %}
+    {% url form_url object.id %}
+{% else %}
+    {% url form_url%}
+{% endif %}
+{% endblock %}

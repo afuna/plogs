@@ -5,7 +5,10 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 def index(request):
-    return render(request, 'main/index.html')
+    if request.user.is_authenticated():
+        return render(request, 'buildlogs/frontpage.html')
+    else:
+        return render(request, 'main/index.html')
 
 def signup(request):
     if request.method == 'POST':

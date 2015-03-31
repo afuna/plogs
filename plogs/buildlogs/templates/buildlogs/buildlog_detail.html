@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+<li>Project #{{object.project.id}}: {{ object.project }} build #{{ object.id }}</li>
+<li>Date: {{ object.date }}</li>
+<li>Category: {{ object.category }}</li>
+<li>Partner: {{ object.partner }}</li>
+<li>Duration: {{ object.duration }}</li>
+<li>Reference: {{ object.reference }}</li>
+<li>Parts: {{ object.parts }}</li>
+<li>Summary: {{ object.summary }}</li>
+<li>Notes: {{ object.notes }}</li>
+</ul>
+
+{% endblock %}
