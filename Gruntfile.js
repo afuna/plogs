@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         bower: {
             install: {
                 options: {
-                    copy: false
+                    copy: false // doesn't copy nested, so let's copy manually
                 }
             }
         },
@@ -28,6 +28,16 @@ module.exports = function(grunt) {
         },
 
         copy: {
+            vendor: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'bower_components',
+                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*'],
+                        dest: 'plogs/main/src/vendor/'
+                    }
+                ]
+            },
             js: {
                 files: [
                     {
@@ -58,7 +68,7 @@ module.exports = function(grunt) {
         },
 
         clean: {
-            dist: ['plogs/main/static/assets', 'staticfiles/assets']
+            dist: ['plogs/main/src/vendor', 'plogs/main/static/assets', 'staticfiles/assets']
         },
 
         watch: {
@@ -77,7 +87,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('install', ['bower:install']);
-    grunt.registerTask('dist-css', ['less:compile']);
+    grunt.registerTask('dist-css', ['copy:vendor', 'less:compile']);
     grunt.registerTask('dist-js', ['copy:js']);
     grunt.registerTask('dist-static', ['copy:staticfiles']);
     grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js', 'dist-static']);

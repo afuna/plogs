@@ -5,3 +5,4 @@ venv
 **/static/assets/
 **/node_modules/
 staticfiles
+bower_components
