@@ -87,9 +87,6 @@ STATICFILES_FINDERS = (
 )
 
 COMPRESS_OFFLINE = not DEBUG
-COMPRESS_PRECOMPILERS = (
-    ('text/less', 'lessc {infile} {outfile}'),
-)
 
 # Bootstrap theme
 BOOTSTRAP3 = {
