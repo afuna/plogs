@@ -36,15 +36,22 @@ class Partner(models.Model):
     class Meta:
         unique_together = ('user', 'name')
 
+class ProjectManager(models.Manager):
+    def latest_for_user(self, user):
+        return self.get_queryset().filter(plane__owner=user).order_by('-id').first()
+
 class Project(models.Model):
     plane = models.ForeignKey(Plane)
     date_started = models.DateField(auto_now_add=True)
+
+    objects = ProjectManager()
 
     def __unicode__(self):
         return "%s" % self.plane
 
 class BuildLog(models.Model):
     project = models.ForeignKey(Project)
+    log_id = models.PositiveIntegerField() # per-project
 
     category = models.ForeignKey(Category)
     partner = models.ForeignKey(Partner, null=True, blank=True)
@@ -62,5 +69,18 @@ class BuildLog(models.Model):
         return self.summary or "(no summary)"
 
     def get_absolute_url(self):
-        return reverse('build:view', args=[str(self.id)])
-    # images
+        return reverse('build:view', args=[str(self.log_id)])
+
+    def save(self, *args, **kwargs):
+        """ Custom save logic. We want to have a per-project log id (instead of per-table). """
+        if not self.log_id:
+            # Grab the highest current index (if it exists)
+            try:
+                recent = BuildLog.objects.filter(project=self.project).order_by('-log_id').first()
+                self.log_id = recent.log_id + 1
+            except AttributeError:
+                self.log_id = 1
+        super(BuildLog, self).save(*args, **kwargs)
+
+    class Meta:
+        unique_together = ('project', 'log_id')

@@ -57,3 +57,12 @@ class BuildLogUpdate(BuildLogBase, UpdateView):
 
 class BuildLogDetail(DetailView):
     model = BuildLog
+    slug_field = 'log_id'
+    slug_url_kwarg = 'log_id'
+
+    def get_queryset(self):
+        project = Project.objects.latest_for_user(self.request.user)
+        project_queryset = BuildLog.objects.get_queryset().filter(project=project)
+
+        return project_queryset
+
