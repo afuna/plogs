@@ -1,11 +1,27 @@
-{% extends 'bootstrap3/bootstrap3.html' %}
+<!DOCTYPE html>
 {% load bootstrap3 %}
+{% load compress %}
+{% load static from staticfiles %}
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
 
-{% block bootstrap3_title %}{% block title %}Plogs{% endblock %} {% endblock %}
+<head>
+    <meta charset="utf-8">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Plogs{% endblock %}</title>
+    {% compress css %}
+    <link href="{% static 'assets/css/plogs.css' %}" media="all" rel="stylesheet">
+    {% endcompress %}
 
-{% block bootstrap3_extra_head %}{% block head %}{% endblock %}{% endblock %}
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
 
-{% block bootstrap3_content %}
+<body>
 <nav class="navbar navbar-inverse navbar-default navbar-static-top">
   <div class="container">
     <div class="navbar-header">
@@ -43,4 +59,11 @@
 <div class="container">{% block content %}{% endblock %}</div>
 {% endblock %}
 
-{% endblock %}
+{% compress js %}
+<script type="text/javascript" src="{% static 'assets/js/vendor/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/vendor/bootstrap.min.js' %}"></script>
+{% endcompress %}
+</body>
+
+</html>
+
