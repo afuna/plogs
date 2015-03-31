@@ -44,7 +44,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'plogs/main/src/',
                         src: ['vendor/bootstrap/dist/js/*', 'vendor/jquery/dist/*'],
-                        dest: 'plogs/main/static/assets/'
+                        dest: 'plogs/main/static/assets/js'
                     },
                     {
                         expand: true,
