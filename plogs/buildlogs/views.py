@@ -26,10 +26,6 @@ class BuildLogNew(BuildLogBase, CreateView):
 
     def form_valid(self, form):
         obj = form.save(commit=False)
-
-        if not form['duration'].value():
-            obj.duration = 0
-
         obj.project = Project.objects.latest_for_user(self.request.user)
         obj.save()
 
@@ -41,15 +37,6 @@ class BuildLogNew(BuildLogBase, CreateView):
         return context
 
 class BuildLogUpdate(BuildLogBase, UpdateView):
-    def form_valid(self, form):
-        obj = form.save(commit=False)
-
-        if not form['duration'].value():
-            obj.duration = 0
-        obj.save()
-
-        return super(BuildLogUpdate, self).form_valid(form)
-
     def get_context_data(self, *args, **kwargs):
         context = super(BuildLogUpdate, self).get_context_data(*args, **kwargs)
         context['form_url'] = 'build:edit'

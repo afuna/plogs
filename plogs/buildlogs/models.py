@@ -73,13 +73,17 @@ class BuildLog(models.Model):
 
     def save(self, *args, **kwargs):
         """ Custom save logic. We want to have a per-project log id (instead of per-table). """
-        if not self.log_id:
+        if self.log_id is None:
             # Grab the highest current index (if it exists)
             try:
                 recent = BuildLog.objects.filter(project=self.project).order_by('-log_id').first()
                 self.log_id = recent.log_id + 1
             except AttributeError:
                 self.log_id = 1
+
+        if self.duration is None:
+            self.duration = 0
+
         super(BuildLog, self).save(*args, **kwargs)
 
     class Meta:
