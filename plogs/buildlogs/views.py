@@ -37,6 +37,9 @@ class BuildLogNew(BuildLogBase, CreateView):
         return context
 
 class BuildLogUpdate(BuildLogBase, UpdateView):
+    slug_field = 'log_id'
+    slug_url_kwarg = 'log_id'
+
     def get_context_data(self, *args, **kwargs):
         context = super(BuildLogUpdate, self).get_context_data(*args, **kwargs)
         context['form_url'] = 'build:edit'
