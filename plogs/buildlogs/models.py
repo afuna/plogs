@@ -16,6 +16,10 @@ class Category(models.Model):
     def __unicode__(self):
         return self.name
 
+    @classmethod
+    def default_categories(cls):
+        return ('Avionics', 'Empennage', 'Engine', 'Fuselage', 'Miscellaneous', 'Prop', 'Tools', 'Wings')
+
     class Meta:
         unique_together = ('user', 'name')
         verbose_name_plural = 'categories'

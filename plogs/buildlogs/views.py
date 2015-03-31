@@ -16,8 +16,8 @@ class BuildLogBase(FormMixin):
 
     def get_form(self, form_class):
         form = super(BuildLogBase, self).get_form(form_class)
-        form.fields['category'].queryset = Category.objects.for_user(self.request.user)
-        form.fields['partner'].queryset = Partner.objects.for_user(self.request.user)
+        form.fields['category'].queryset = Category.objects.for_user(self.request.user).order_by('name')
+        form.fields['partner'].queryset = Partner.objects.for_user(self.request.user).order_by('name')
         return form
 
 
