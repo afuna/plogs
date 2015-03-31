@@ -4,3 +4,4 @@ venv
 **/src/vendor/
 **/static/assets/
 **/node_modules/
+staticfiles
