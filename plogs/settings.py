@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
 # Application definition
-
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,8 +37,24 @@ ROOT_URLCONF = 'plogs.urls'
 
 WSGI_APPLICATION = 'plogs.wsgi.application'
 
+# Development settings - unsuitable for production
+# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
 
-# Parse database configuration from $DATABASE_URL
+import os
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ.get('SECRET_KEY', 'its-a-secret')
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = os.environ.get('DJANGO_DEBUG', False)
+
+TEMPLATE_DEBUG = os.environ.get('DJANGO_TEMPLATE_DEBUG', False)
+
+INTERNAL_IPS = []
+if DEBUG:
+    INTERNAL_IPS = [ '127.0.0.1' ]
+
+# Database configuration
 import dj_database_url
 DATABASES = {}
 DATABASES['default'] = dj_database_url.config()
@@ -51,7 +66,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 ALLOWED_HOSTS = ['*']
 
 # Static asset configuration
-import os
+if DEBUG:
+    WHITENOISE_MAX_AGE = 0
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
@@ -59,7 +76,7 @@ STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'main/src'),
 )
 
 STATICFILES_FINDERS = (
@@ -67,6 +84,11 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     # other finders..
     'compressor.finders.CompressorFinder',
+)
+
+COMPRESS_OFFLINE = not DEBUG
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
 )
 
 # Bootstrap theme
@@ -77,18 +99,6 @@ BOOTSTRAP3 = {
 
 # Registration
 LOGIN_REDIRECT_URL = "/"
-
-
-# Development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.7/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'its-a-secret')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', False)
-
-TEMPLATE_DEBUG = os.environ.get('DJANGO_TEMPLATE_DEBUG', False)
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

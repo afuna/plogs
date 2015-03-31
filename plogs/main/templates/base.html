@@ -9,9 +9,13 @@
     <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Plogs{% endblock %}</title>
-    {% compress css %}
-    <link href="{% static 'assets/css/plogs.css' %}" media="all" rel="stylesheet">
-    {% endcompress %}
+    {% if debug %}
+      <link type="text/css" href="{% static 'assets/css/plogs.css' %}" media="all" rel="stylesheet">
+    {% else %}
+      {% compress css %}
+      <link type="text/less" href="{% static 'less/custom-bootstrap.less' %}" media="all" rel="stylesheet">
+      {% endcompress %}
+    {% endif %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -60,9 +64,10 @@
 {% endblock %}
 
 {% compress js %}
-<script type="text/javascript" src="{% static 'assets/js/vendor/jquery.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'assets/js/vendor/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/vendor/jquery/dist/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/vendor/bootstrap/dist/js/bootstrap.js' %}"></script>
 {% endcompress %}
+
 </body>
 
 </html>

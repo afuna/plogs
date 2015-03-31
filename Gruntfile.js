@@ -31,10 +31,10 @@ module.exports = function(grunt) {
             js: {
                 files: [
                     {
-                        flatten: true,
                         expand: true,
-                        src: ['plogs/main/src/vendor/bootstrap/dist/js/*', 'plogs/main/src/vendor/jquery/dist/*'],
-                        dest: 'plogs/main/static/assets/js/vendor/'
+                        cwd: 'plogs/main/src/',
+                        src: ['vendor/bootstrap/dist/js/*', 'vendor/jquery/dist/*'],
+                        dest: 'plogs/main/static/assets/'
                     },
                     {
                         expand: true,
@@ -49,16 +49,22 @@ module.exports = function(grunt) {
                 src: 'plogs/main/src/vendor/bootstrap/dist/fonts/*',
                 dest: 'plogs/main/static/assets/fonts'
             },
+            staticfiles: {
+                expand: true,
+                cwd: 'plogs/main/static/assets/',
+                src: '**',
+                dest: 'staticfiles/assets/'
+            }
         },
 
         clean: {
-            dist: 'plogs/main/static/assets'
+            dist: ['plogs/main/static/assets', 'staticfiles/assets']
         },
 
         watch: {
             less: {
                 files: 'plogs/main/src/less/**/*.less',
-                tasks: 'dist-css'
+                tasks: ['dist-css', 'dist-static']
             }
         },
 
@@ -73,6 +79,7 @@ module.exports = function(grunt) {
     grunt.registerTask('install', ['bower:install']);
     grunt.registerTask('dist-css', ['less:compile']);
     grunt.registerTask('dist-js', ['copy:js']);
-    grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js']);
+    grunt.registerTask('dist-static', ['copy:staticfiles']);
+    grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js', 'dist-static']);
     grunt.registerTask('default', ['install', 'dist']);
 };
