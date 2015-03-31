@@ -11,7 +11,7 @@ class Kit(models.Model):
         serial_number = ""
         if self.serial_number:
             serial_number = " #%s" % self.serial_number
-        return "%s%s" % (self.model, serial_number) or "<%s>" % self.__class__.__name__
+        return "%s%s" % (self.model, serial_number) or "<%s #%d>" % (self.__class__.__name__, self.id)
 
 class Engine(models.Model):
     manufacturer = models.CharField(max_length=255, blank=True)
@@ -25,7 +25,7 @@ class Engine(models.Model):
             serial_number = " #%s" % self.serial_number
         if self.horsepower:
             hp = "%s HP"
-        return "%s%s%s" % (self.model, hp, serial_number) or "<%s>" % self.__class__.__name__
+        return "%s%s%s" % (self.model, hp, serial_number) or "<%s #%d>" % (self.__class__.__name__, self.id)
 
 
 class Prop(models.Model):
@@ -42,7 +42,7 @@ class Prop(models.Model):
             serial_number = " #%s" % self.serial_number
         if self.prop_type:
             prop_type = " %s" % self.prop_type
-        return "%s%s%s" % (self.model, prop_type, serial_number) or "<%s>" % self.__class__.__name__
+        return "%s%s%s" % (self.model, prop_type, serial_number) or "<%s #%d>" % (self.__class__.__name__, self.id)
 
 
 class Plane(models.Model):
