@@ -1,0 +1,1 @@
+web: gunicorn plogs.wsgi --log-file -
