@@ -30,7 +30,7 @@ class BuildLogNew(BuildLogBase, CreateView):
         if not form['duration'].value():
             obj.duration = 0
 
-        obj.project = Project.objects.filter(plane__owner=self.request.user).last()
+        obj.project = Project.objects.latest_for_user(self.request.user)
         obj.save()
 
         return super(BuildLogNew, self).form_valid(form)
