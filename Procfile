@@ -1,1 +1,2 @@
-web: gunicorn plogs.wsgi --log-file -
+web: gunicorn --logfile - plogs.wsgi
+dev: gunicorn --reload --log-file - plogs.wsgi
