@@ -109,3 +109,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Errors
+if os.environ.get('ADMIN_EMAIL'):
+    ADMINS = (('Admin', os.environ.get('ADMIN_EMAIL')))
