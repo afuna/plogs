@@ -47,6 +47,9 @@ class Prop(models.Model):
             prop_type = " %s" % self.get_prop_type_display()
         return "%s%s%s" % (self.model, prop_type, serial_number) or "<%s #%d>" % (self.__class__.__name__, self.id)
 
+class PlaneManager(models.Manager):
+    def for_user(self, user):
+        return self.filter(owner=user)
 
 class Plane(models.Model):
     owner = models.ForeignKey(User)
@@ -54,6 +57,8 @@ class Plane(models.Model):
     kit = models.ForeignKey(Kit)
     engine = models.ForeignKey(Engine)
     prop = models.ForeignKey(Prop)
+
+    objects = PlaneManager()
 
     def __unicode__(self):
         return "%s" % self.kit
