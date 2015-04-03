@@ -11,6 +11,7 @@
     <title>{% block title %}Plogs{% endblock %}</title>
     {% compress css %}
       <link type="text/css" href="{% static 'assets/css/plogs.css' %}" media="all" rel="stylesheet">
+      {% block page_css %}{% endblock %}
     {% endcompress %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -60,10 +61,10 @@
 {% endblock %}
 
 {% compress js %}
-<script type="text/javascript" src="{% static 'assets/vendor/jquery/dist/jquery.js' %}"></script>
-<script type="text/javascript" src="{% static 'assets/vendor/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/vendor/jquery/dist/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/vendor/bootstrap/dist/js/bootstrap.js' %}"></script>
 {% endcompress %}
-
+{% compress js %}{% block page_scripts %}{% endblock %}{% endcompress %}
 </body>
 
 </html>
