@@ -24,7 +24,7 @@ class Engine(models.Model):
         if self.serial_number:
             serial_number = " #%s" % self.serial_number
         if self.horsepower:
-            hp = "%s HP"
+            hp = " %s HP" % self.horsepower
         return "%s%s%s" % (self.model, hp, serial_number) or "<%s #%d>" % (self.__class__.__name__, self.id)
 
 
@@ -33,7 +33,10 @@ class Prop(models.Model):
     model = models.CharField(max_length=255, blank=True)
     serial_number = models.CharField(max_length=255, blank=True)
 
-    PROP_TYPES = (('FP', 'Fixed pitch'), ('CS', 'Constant speed'))
+    PROP_TYPES = (
+                  ('FP', 'Fixed Pitch'),
+                  ('CS', 'Constant Speed')
+                 )
     prop_type = models.CharField(max_length=2, choices=PROP_TYPES)
 
     def __unicode__(self):
@@ -41,7 +44,7 @@ class Prop(models.Model):
         if self.serial_number:
             serial_number = " #%s" % self.serial_number
         if self.prop_type:
-            prop_type = " %s" % self.prop_type
+            prop_type = " %s" % self.get_prop_type_display()
         return "%s%s%s" % (self.model, prop_type, serial_number) or "<%s #%d>" % (self.__class__.__name__, self.id)
 
 
