@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormMixin, CreateView, UpdateView
-from django.views.generic import DetailView
+from django.views.generic import DetailView, ListView
 from django.utils.decorators import method_decorator
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
 from django.utils import timezone
 from django.http import HttpResponse
@@ -21,6 +22,7 @@ class BuildLogBase(FormMixin):
         form = super(BuildLogBase, self).get_form(form_class)
         form.fields['category'].queryset = Category.objects.for_user(self.request.user).order_by('name')
         form.fields['partner'].queryset = Partner.objects.for_user(self.request.user).order_by('name')
+        form.fields['partner'].help_text ="<a href='%s'>Add</a>" % reverse_lazy('build:partner_new')
         return form
 
 
@@ -70,6 +72,36 @@ class BuildLogDetail(DetailView):
         context = super(BuildLogDetail, self).get_context_data(*args, **kwargs)
         context['images'] = BuildLogImage.objects.for_build(build=context['object'])
         return context
+
+class PartnerNew(CreateView):
+    model = Partner
+    fields = ['name']
+    success_url = reverse_lazy('build:partner_list')
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PartnerNew, self).dispatch(*args, **kwargs)
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(PartnerNew, self).get_context_data(*args, **kwargs)
+        context['form_url'] = 'build:partner_new'
+        return context
+
+    def form_valid(self, form):
+        partner = form.save(commit=False)
+        partner.user = self.request.user
+        partner.save()
+        return super(PartnerNew, self).form_valid(form)
+
+class PartnerList(ListView):
+    model = Partner
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PartnerList, self).dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Partner.objects.filter(user=self.request.user)
 
 @login_required
 def photo_upload_url(request):

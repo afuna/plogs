@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Partners</h1>
+
+<ul>
+{% for partner in object_list %}
+<li>{{ partner.name }}</li>
+{% endfor %}
+</ul>
+{% endblock %}
