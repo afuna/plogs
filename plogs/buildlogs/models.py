@@ -92,3 +92,35 @@ class BuildLog(models.Model):
 
     class Meta:
         unique_together = ('project', 'log_id')
+
+class BuildLogImageManager(models.Manager):
+    def from_build_new(self):
+        return self.filter(build=None)
+
+    def for_build(self, build):
+        return self.filter(build=build)
+
+class BuildLogImage(models.Model):
+    project = models.ForeignKey(Project)
+    url = models.CharField(max_length=255)
+    caption = models.CharField(max_length=255, blank=True)
+
+    # may have uploaded the image without having created the build yet
+    build = models.ForeignKey(BuildLog, null=True)
+
+    # per project
+    image_id = models.PositiveIntegerField()
+
+    objects = BuildLogImageManager()
+
+    def save(self, *args, **kwargs):
+        """Custom save logic. We want to have a per-project image id (instead of per-table)"""
+        if self.image_id is None:
+            # Grab the highest current index (if it exists)
+            try:
+                recent = BuildLogImage.objects.filter(project=self.project).order_by('-image_id').first()
+                self.image_id = recent.image_id + 1
+            except AttributeError:
+                self.image_id = 1
+
+        super(BuildLogImage, self).save(*args, **kwargs)
