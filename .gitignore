@@ -2,7 +2,7 @@ venv
 .env
 **.pyc
 **/src/vendor/
-**/static/assets/
+plogs/main/static/assets/
 **/node_modules/
 staticfiles
 bower_components

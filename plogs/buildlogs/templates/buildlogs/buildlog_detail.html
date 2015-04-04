@@ -12,5 +12,21 @@
 <li>Summary: {{ object.summary }}</li>
 <li>Notes: {{ object.notes }}</li>
 </ul>
+{% if images %}
+Images:
+<div class="row">
+{% for image in images %}
+<div class="col-sm-3">
+<div class="thumbnail">
+<a href="{{ image.url }}"><img src="{{ image.url }}" /></a>
+{% if image.caption %}
+<div class="caption">{{ image.caption }} </div>
+{% endif %}
+</div>
+</div>
+{% endfor %}
+</ul>
+{% endif %}
+
 
 {% endblock %}
