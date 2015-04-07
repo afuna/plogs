@@ -7,7 +7,7 @@ from .forms import SimplePlaneForm
 from .signals import post_create
 
 @login_required
-def new(request):
+def new(request, *args, **kwargs):
     if request.method == "POST":
         form = SimplePlaneForm(request.POST)
         if form.is_valid():
@@ -35,4 +35,4 @@ def new(request):
         'form_button': 'Start Logging',
         'title': 'Add Your Plane Kit',
     }
-    return render(request, 'base_form.html', context)
+    return render(request, 'registration/_base_form.html', context)
