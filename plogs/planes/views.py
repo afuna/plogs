@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse_lazy
 from django.dispatch import Signal
 from .models import Plane, Engine, Prop
 from .forms import SimplePlaneForm
@@ -30,7 +31,7 @@ def new(request):
 
     context = {
         'form': form,
-        'form_url': 'planes:new',
+        'form_url': reverse_lazy('planes:new'),
         'form_button': 'Start Logging',
         'title': 'Add Your Plane Kit',
     }

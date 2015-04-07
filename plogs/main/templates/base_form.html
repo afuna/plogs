@@ -4,7 +4,7 @@
 {% block title %}{{title}}{% endblock %}
 
 {% block content %}
-<form method="POST" action="{% block form_url %}{% url form_url %}{% endblock %}">
+<form method="POST" action="{% block form_url %}{% endblock %}">
     {% csrf_token %}
 
     {% bootstrap_form form %}

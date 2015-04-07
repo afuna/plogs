@@ -4,16 +4,11 @@
 {% block title %}Log Build Session{% endblock %}
 {% block form_button %}Log{% endblock %}
 
-{% block form_url %}
-{% if form_url == "build:edit" %}
-    {% url form_url object.log_id %}
-{% else %}
-    {% url form_url%}
-{% endif %}
-{% endblock %}
+{% block form_url %}{{ form_url }}{% endblock %}
 
 {% block extra_content %}
 <input type="hidden" id="log_id" value="{{ object.log_id }}" />
+<input type="hidden" id="project_name" value="{{ project_name }}" />
 <p id="status"></p>
 <div class="row" id="js-images">
 <div class="col-sm-3"><input type="file" id="js-files" class="well" /></div>
@@ -48,7 +43,7 @@
         var s3upload = new S3Upload({
             file_dom_selector: 'js-files',
             s3_sign_put_url: '{% url "build:photo_upload_url" %}',
-            s3_object_name: $("#log_id").val(),
+            s3_object_name: $("#project_name").val() + "-" + $("#log_id").val(),
             onProgress: function(percent, message) {
                 status_elem.html('Upload progress: ' + percent + '% ' + message);
             },

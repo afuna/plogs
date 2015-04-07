@@ -31,7 +31,8 @@ class BuildLogNew(BuildLogBase, CreateView):
 
     def form_valid(self, form):
         buildlog = form.save(commit=False)
-        buildlog.project = Project.objects.latest_for_user(self.request.user)
+        project_name = self.kwargs['project_name']
+        buildlog.project = Project.objects.for_user(self.request.user, project_name=project_name).first()
         buildlog.save()
 
         # now make sure all the images have this buildlog
@@ -44,17 +45,34 @@ class BuildLogNew(BuildLogBase, CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(BuildLogNew, self).get_context_data(*args, **kwargs)
-        context['form_url'] = 'build:new'
+        context['form_url'] = reverse_lazy('build:new',
+                                           kwargs={
+                                               "project_name": self.kwargs['project_name'],
+                                           })
         return context
 
 class BuildLogUpdate(BuildLogBase, UpdateView):
     slug_field = 'log_id'
     slug_url_kwarg = 'log_id'
 
+    def get_queryset(self):
+        user = self.request.user
+        project_name = self.kwargs['project_name']
+        project = Project.objects.for_user(user, project_name=project_name).first()
+
+        log_id = self.kwargs['log_id']
+        project_queryset = BuildLog.objects.filter(log_id=log_id, project=project)
+        return project_queryset
+
     def get_context_data(self, *args, **kwargs):
         context = super(BuildLogUpdate, self).get_context_data(*args, **kwargs)
         context['images'] = BuildLogImage.objects.for_build(build=context['object'])
-        context['form_url'] = 'build:edit'
+        context['form_url'] = reverse_lazy('build:edit',
+                                           kwargs={
+                                               "project_name": self.kwargs['project_name'],
+                                               "log_id": self.kwargs['log_id'],
+                                           })
+        context['project_name'] = self.kwargs['project_name']
         return context
 
 class BuildLogDetail(DetailView):
@@ -63,9 +81,11 @@ class BuildLogDetail(DetailView):
     slug_url_kwarg = 'log_id'
 
     def get_queryset(self):
-        project = Project.objects.latest_for_user(self.request.user)
-        project_queryset = BuildLog.objects.get_queryset().filter(project=project)
+        user = self.request.user
+        project_name = self.kwargs['project_name']
+        project = Project.objects.for_user(user, project_name=project_name).first()
 
+        project_queryset = BuildLog.objects.filter(project=project)
         return project_queryset
 
     def get_context_data(self, *args, **kwargs):
@@ -84,7 +104,7 @@ class PartnerNew(CreateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super(PartnerNew, self).get_context_data(*args, **kwargs)
-        context['form_url'] = 'build:partner_new'
+        context['form_url'] = reverse_lazy('build:partner_new')
         return context
 
     def form_valid(self, form):
@@ -113,9 +133,10 @@ def photo_upload_url(request):
         return HttpResponse(json.dumps({}))
 
     mime_type = request.GET['s3_object_type']
-    buildlog_id = request.GET['s3_object_name']
+    object_name = request.GET['s3_object_name']
+    project_name, buildlog_id = object_name.split("-")
 
-    project = Project.objects.latest_for_user(request.user)
+    project = Project.objects.for_user(request.user, project_name=project_name).first()
     build = None
     if buildlog_id:
         build = BuildLog.objects.get(project=project, log_id=buildlog_id)

@@ -42,7 +42,17 @@ class Partner(models.Model):
 
 class ProjectManager(models.Manager):
     def latest_for_user(self, user):
-        return self.get_queryset().filter(plane__owner=user).order_by('-id').first()
+        """Get the latest project for the user. This will eventually be replaced
+        by the last project the user has touched."""
+        return self.filter(plane__owner=user).order_by('-id').first()
+
+    def for_user(self, user, project_name=None):
+        queryset = self.filter(plane__owner=user)
+
+        if project_name:
+            queryset = queryset.filter(plane__kit__model=project_name)
+
+        return queryset
 
 class Project(models.Model):
     plane = models.ForeignKey(Plane)
@@ -73,7 +83,11 @@ class BuildLog(models.Model):
         return self.summary or "(no summary)"
 
     def get_absolute_url(self):
-        return reverse('build:view', args=[str(self.log_id)])
+        return reverse('build:view',
+                       kwargs={
+                           "log_id": str(self.log_id),
+                           "project_name": self.project.plane.kit.model,
+                       })
 
     def save(self, *args, **kwargs):
         """ Custom save logic. We want to have a per-project log id (instead of per-table). """
