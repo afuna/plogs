@@ -16,7 +16,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor',
     'bootstrap3',
     'plogs.main',
     'plogs.planes',
@@ -89,14 +88,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'main/src'),
 )
 
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    # other finders..
-    'compressor.finders.CompressorFinder',
-)
-
-COMPRESS_OFFLINE = not DEBUG
 
 # Bootstrap theme
 BOOTSTRAP3 = {
