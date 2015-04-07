@@ -33,7 +33,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'bower_components',
-                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*'],
+                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*', 'bootstrap/dist/fonts/*'],
                         dest: 'plogs/main/src/vendor/'
                     }
                 ]
