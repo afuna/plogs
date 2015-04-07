@@ -53,6 +53,7 @@ class BuildLogNew(BuildLogBase, CreateView):
                                                "project_name": self.kwargs['project_name'],
                                                "username": self.request.user,
                                            })
+        context['project_name'] = self.kwargs['project_name']
         return context
 
 class BuildLogUpdate(BuildLogBase, UpdateView):
@@ -134,7 +135,7 @@ class PartnerList(ListView):
         return Partner.objects.filter(user=self.request.user)
 
 @login_required
-def photo_upload_url(request):
+def photo_upload_url(request, *args, **kwargs):
     AWS_ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     S3_BUCKET = os.environ.get('S3_BUCKET')
@@ -143,8 +144,8 @@ def photo_upload_url(request):
         return HttpResponse(json.dumps({}))
 
     mime_type = request.GET['s3_object_type']
-    object_name = request.GET['s3_object_name']
-    project_name, buildlog_id = object_name.split("-")
+    project_name = request.GET['project_name']
+    buildlog_id = request.GET['log_id']
 
     project = Project.objects.for_user(request.user, project_name=project_name).first()
     build = None

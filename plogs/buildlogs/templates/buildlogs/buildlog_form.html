@@ -43,7 +43,8 @@
         var s3upload = new S3Upload({
             file_dom_selector: 'js-files',
             s3_sign_put_url: '{% url "build:photo_upload_url" username=user.username %}',
-            s3_object_name: $("#project_name").val() + "-" + $("#log_id").val(),
+            project_name: $("#project_name").val(),
+            log_id: $("#log_id").val(),
             onProgress: function(percent, message) {
                 status_elem.html('Upload progress: ' + percent + '% ' + message);
             },
