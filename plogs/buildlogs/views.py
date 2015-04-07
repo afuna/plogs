@@ -8,6 +8,7 @@ from django.utils import timezone
 from django.http import HttpResponse
 from hashlib import sha1
 import time, os, json, base64, hmac, urllib
+from django.contrib.auth.models import User
 from .models import BuildLog, Category, Partner, Project, BuildLogImage
 
 class BuildLogBase(FormMixin):
@@ -22,7 +23,9 @@ class BuildLogBase(FormMixin):
         form = super(BuildLogBase, self).get_form(form_class)
         form.fields['category'].queryset = Category.objects.for_user(self.request.user).order_by('name')
         form.fields['partner'].queryset = Partner.objects.for_user(self.request.user).order_by('name')
-        form.fields['partner'].help_text ="<a href='%s'>Add</a>" % reverse_lazy('build:partner_new')
+        form.fields['partner'].help_text ="<a href='%s'>Add</a>" % reverse_lazy(
+            'build:partner_new',
+            kwargs={"username": self.request.user})
         return form
 
 
@@ -48,6 +51,7 @@ class BuildLogNew(BuildLogBase, CreateView):
         context['form_url'] = reverse_lazy('build:new',
                                            kwargs={
                                                "project_name": self.kwargs['project_name'],
+                                               "username": self.request.user,
                                            })
         return context
 
@@ -71,6 +75,7 @@ class BuildLogUpdate(BuildLogBase, UpdateView):
                                            kwargs={
                                                "project_name": self.kwargs['project_name'],
                                                "log_id": self.kwargs['log_id'],
+                                               "username": self.request.user,
                                            })
         context['project_name'] = self.kwargs['project_name']
         return context
@@ -81,7 +86,8 @@ class BuildLogDetail(DetailView):
     slug_url_kwarg = 'log_id'
 
     def get_queryset(self):
-        user = self.request.user
+        user = User.objects.filter(username=self.kwargs["username"])
+
         project_name = self.kwargs['project_name']
         project = Project.objects.for_user(user, project_name=project_name).first()
 
@@ -96,15 +102,19 @@ class BuildLogDetail(DetailView):
 class PartnerNew(CreateView):
     model = Partner
     fields = ['name']
-    success_url = reverse_lazy('build:partner_list')
 
     @method_decorator(login_required)
     def dispatch(self, *args, **kwargs):
         return super(PartnerNew, self).dispatch(*args, **kwargs)
 
+    def get_success_url(self):
+        return reverse_lazy('build:partner_list',
+                            kwargs={"username": self.request.user})
+
     def get_context_data(self, *args, **kwargs):
         context = super(PartnerNew, self).get_context_data(*args, **kwargs)
-        context['form_url'] = reverse_lazy('build:partner_new')
+        context['form_url'] = reverse_lazy('build:partner_new',
+                                           kwargs={"username": self.request.user})
         return context
 
     def form_valid(self, form):
