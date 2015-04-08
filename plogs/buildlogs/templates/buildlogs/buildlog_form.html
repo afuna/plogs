@@ -1,5 +1,5 @@
 {% extends 'base_form.html' %}
-{% load static from staticfiles %}
+{% load static %}
 
 {% block title %}Log Build Session{% endblock %}
 {% block form_button %}Log{% endblock %}
@@ -28,7 +28,7 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script type="text/javascript" src="{% static 'assets/js/vendor/s3upload/s3upload.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/buildlogs/js/s3upload.js' %}"></script>
 <script type="text/javascript">
 
 (function($) {

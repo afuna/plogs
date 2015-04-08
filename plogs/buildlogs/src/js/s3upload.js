@@ -61,7 +61,7 @@
       var this_s3upload, xhr;
       this_s3upload = this;
       xhr = new XMLHttpRequest();
-      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_name=' + this.project_name +   '&log_id=' + this.log_id, true);
+      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_name=' + this.project_name + '&log_id=' + this.log_id, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
       xhr.onreadystatechange = function(e) {
         var result;
@@ -107,7 +107,7 @@
         };
       }
       xhr.setRequestHeader('Content-Type', file.type);
-      xhr.setRequestHeader('x-amz-acl', 'public-read');
+      xhr.setRequestHeader('x-amz-acl', 'public-read')
       return xhr.send(file);
     };
 

@@ -1,8 +1,15 @@
-venv
+# local variables
 .env
+
+# generated files - own
 **.pyc
-**/src/vendor/
-plogs/main/static/assets/
+plogs/*/static/
+
+# generated files - third-party
+venv
 **/node_modules/
-staticfiles
 bower_components
+**/src/vendor/
+
+# generated files for production
+staticfiles

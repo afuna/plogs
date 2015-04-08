@@ -74,20 +74,11 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Allow all host headers
 ALLOWED_HOSTS = ['*']
 
-# Static asset configuration
-if DEBUG:
-    WHITENOISE_MAX_AGE = 0
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
-
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'main/src'),
-)
-
 
 # Bootstrap theme
 BOOTSTRAP3 = {

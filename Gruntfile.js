@@ -20,10 +20,10 @@ module.exports = function(grunt) {
                     sourceMap: true,
                     outputSourceFiles: true,
                     sourceMapURL: '<%= pkg.name %>.css.map',
-                    sourceMapFilename: 'plogs/main/static/assets/css/<%= pkg.name %>.css.map'
+                    sourceMapFilename: '<%= compiled_assets %>/css/<%= pkg.name %>.css.map'
                 },
-                src: 'plogs/main/src/less/custom-bootstrap.less',
-                dest: 'plogs/main/static/assets/css/<%= pkg.name %>.css'
+                src: ['plogs/*/src/less/*.less', '!plogs/main/src/**', 'plogs/main/src/less/custom-bootstrap.less'],
+                dest: '<%= compiled_assets %>/css/<%= pkg.name %>.css'
             }
         },
 
@@ -34,7 +34,7 @@ module.exports = function(grunt) {
                         expand: true,
                         cwd: 'bower_components',
                         src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*', 'bootstrap/dist/fonts/*'],
-                        dest: 'plogs/main/src/vendor/'
+                        dest: '<%= vendor_assets %>'
                     }
                 ]
             },
@@ -42,42 +42,45 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'plogs/main/src/',
-                        src: ['vendor/bootstrap/dist/js/*', 'vendor/jquery/dist/*'],
-                        dest: 'plogs/main/static/assets/js'
+                        cwd: '<%= vendor_assets %>',
+                        src: ['bootstrap/dist/js/*', 'jquery/dist/*'],
+                        dest: '<%= compiled_assets %>/vendor'
                     },
                     {
                         expand: true,
-                        src: 'plogs/main/src/js',
-                        dest: 'plogs/main/static/assets/js'
+                        cwd: "plogs",
+                        src: '*/src/js/*',
+                        dest: '<%= compiled_assets %>',
+                        rename: function(dest, src) {
+                            return dest + "/" + src.replace("src/", "");
+                        }
                     }
                 ]
             },
             fonts: {
                 expand: true,
                 flatten: true,
-                src: 'plogs/main/src/vendor/bootstrap/dist/fonts/*',
-                dest: 'plogs/main/static/assets/fonts'
-            },
-            staticfiles: {
-                expand: true,
-                cwd: 'plogs/main/static/assets/',
-                src: '**',
-                dest: 'staticfiles/assets/'
+                src: '<%= vendor_assets %>/bootstrap/dist/fonts/*',
+                dest: '<%= compiled_assets%>/fonts'
             }
         },
 
         clean: {
-            dist: ['plogs/main/src/vendor', 'plogs/main/static/assets', 'staticfiles/assets']
+            dist: ['<%= vendor_assets %>', '<%= compiled_assets %>']
         },
 
         watch: {
             less: {
-                files: 'plogs/main/src/less/**/*.less',
-                tasks: ['dist-css', 'dist-static']
+                files: 'plogs/**/src/less/**.less',
+                tasks: ['less:compile']
+            },
+            js: {
+                files: 'plogs/**/src/js/**.js',
+                tasks: ['copy:js']
             }
         },
-
+        vendor_assets: "plogs/main/src/vendor",
+        compiled_assets: "plogs/main/static/assets"
     });
 
     grunt.loadNpmTasks('grunt-bower-task');
@@ -89,7 +92,6 @@ module.exports = function(grunt) {
     grunt.registerTask('install', ['bower:install']);
     grunt.registerTask('dist-css', ['copy:vendor', 'less:compile']);
     grunt.registerTask('dist-js', ['copy:js']);
-    grunt.registerTask('dist-static', ['copy:staticfiles']);
-    grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js', 'dist-static']);
+    grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js']);
     grunt.registerTask('default', ['install', 'dist']);
 };
