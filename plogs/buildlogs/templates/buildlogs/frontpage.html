@@ -3,17 +3,22 @@
 {% block content_full_width %}
 <div class="jumbotron">
   <div class="container">
-  <p>Progress so far</p>
+  <div class="row">
+    <h1 class="col-xs-12 col-sm-3">RV-4</h1>
+    <div class="col-xs-4 col-sm-2 text-center"><span class="stat-number">10</span><p>hours</p></div>
+    <div class="col-xs-4 col-sm-2 text-center"><span class="stat-number">3</span><p>sessions</p></div>
+    <div class="col-xs-4 col-sm-2 text-center"><span class="stat-number">2,531</span><p>dollars</p></div>
+  </div>
   </div>
 </div>
 
 <div class="container">
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-offset-3 col-sm-3">
         <p class="text-center"><a class="btn btn-primary btn-lg" href="{% url 'build:new' project_name=project_name username=user.username %}" role="button">Log Build Session</a></p>
     </div>
-    <div class="col-sm-6">
+    <div class="col-sm-3">
         <p class="text-center"><a class="btn btn-default btn-lg" href="#" role="button">Log Expense</a></p>
     </div>
 </div>

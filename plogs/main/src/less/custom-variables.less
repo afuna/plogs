@@ -14,7 +14,12 @@
 @gray-light:             lighten(@gray-base, 46.7%); // #777
 @gray-lighter:           lighten(@gray-base, 90%); // #eee
 
-@brand-primary:         #F4A048;
+@blue-sky:              #17BAEF;
+@blue-muted:            #0C86AE;
+@blue-dark:             #074F66;
+@orange:                #FF901E;
+
+@brand-primary:         @orange;
 @brand-success:         #5cb85c;
 @brand-info:            #5bc0de;
 @brand-warning:         #f0ad4e;
@@ -373,8 +378,8 @@
 @navbar-default-link-disabled-bg:          transparent;
 
 // Navbar brand label
-@navbar-default-brand-color:               @navbar-default-link-color;
-@navbar-default-brand-hover-color:         darken(@navbar-default-brand-color, 10%);
+@navbar-default-brand-color:               @blue-sky;
+@navbar-default-brand-hover-color:         @orange;
 @navbar-default-brand-hover-bg:            transparent;
 
 // Navbar toggle
@@ -480,8 +485,8 @@
 //##
 
 @jumbotron-padding:              30px;
-@jumbotron-color:                inherit;
-@jumbotron-bg:                   @gray-lighter;
+@jumbotron-color:                @gray-lighter;
+@jumbotron-bg:                   @blue-muted;
 @jumbotron-heading-color:        inherit;
 @jumbotron-font-size:            ceil((@font-size-base * 1.5));
 
