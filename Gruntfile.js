@@ -71,7 +71,7 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
-                files: 'plogs/**/src/less/**.less',
+                files: ['plogs/**/src/less/**/*.less'],
                 tasks: ['less:compile']
             },
             js: {
