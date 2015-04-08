@@ -4,13 +4,14 @@ from django.contrib.auth import forms, login, authenticate
 from django.http import HttpResponseRedirect
 from django.contrib.auth.models import User
 from .signals import post_create
-from plogs.buildlogs.models import Project
+from plogs.buildlogs.models import Project, BuildLog
 
 
 def index(request):
     if request.user.is_authenticated():
         project = Project.objects.latest_for_user(request.user)
-        return render(request, 'buildlogs/frontpage.html', { "project_name": project.plane.kit.model })
+        stats = BuildLog.statistics.for_project(project)
+        return render(request, 'buildlogs/frontpage.html', { "project_name": project.plane.kit.model, "stats": stats })
     else:
         return render(request, 'main/index.html')
 

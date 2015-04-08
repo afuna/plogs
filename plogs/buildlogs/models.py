@@ -63,6 +63,15 @@ class Project(models.Model):
     def __unicode__(self):
         return "%s" % self.plane
 
+class BuildLogStatisticsManager(models.Model):
+    def for_project(self, project):
+        statistics = BuildLog.objects.filter(project=project).aggregate(hours=models.Sum('duration'), sessions=models.Count('id'))
+
+        # FIXME: add gathering of these statistics
+        statistics['dollars'] = 0
+
+        return statistics
+
 class BuildLog(models.Model):
     project = models.ForeignKey(Project)
     log_id = models.PositiveIntegerField() # per-project
@@ -78,6 +87,8 @@ class BuildLog(models.Model):
 
     summary = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
+
+    statistics = BuildLogStatisticsManager()
 
     def __unicode__(self):
         return self.summary or "(no summary)"
