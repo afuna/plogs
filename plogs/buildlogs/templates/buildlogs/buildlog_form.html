@@ -28,8 +28,9 @@
 {% endblock %}
 
 {% block page_scripts %}
-<script type="text/javascript" src="{% static 'assets/buildlogs/js/s3upload.js' %}"></script>
-<script type="text/javascript">
+<script src="{% static 'assets/buildlogs/js/buildlogs.js' %}"></script>
+<script src="{% static 'assets/buildlogs/js/s3upload.js' %}"></script>
+<script>
 
 (function($) {
     function display_image(url) {
