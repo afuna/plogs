@@ -98,6 +98,7 @@ class BuildLog(models.Model):
                        kwargs={
                            "log_id": str(self.log_id),
                            "project_name": self.project.plane.kit.model,
+                           "username": self.project.plane.owner.username,
                        })
 
     def save(self, *args, **kwargs):
