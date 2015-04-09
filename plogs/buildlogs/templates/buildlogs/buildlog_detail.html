@@ -1,32 +1,53 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<ul>
-<li>Project #{{object.project.id}}: {{ object.project }} build #{{ object.log_id }}</li>
-<li>Date: {{ object.date }}</li>
-<li>Category: {{ object.category }}</li>
-<li>Partner: {{ object.partner }}</li>
-<li>Duration: {{ object.duration }}</li>
-<li>Reference: {{ object.reference }}</li>
-<li>Parts: {{ object.parts }}</li>
-<li>Summary: {{ object.summary }}</li>
-<li>Notes: {{ object.notes }}</li>
-</ul>
-{% if images %}
-Images:
-<div class="row">
-{% for image in images %}
-<div class="col-sm-3">
-<div class="thumbnail">
-<a href="{{ image.url }}"><img src="{{ image.url }}" /></a>
-{% if image.caption %}
-<div class="caption">{{ image.caption }} </div>
-{% endif %}
-</div>
-</div>
-{% endfor %}
-</ul>
-{% endif %}
+{% block title %}Plogs - {{ object.project }} {{object.date|date:"m/d/y"}}{% endblock %}
 
+{% block content_full_width %}
+<div class="container">
+<div class="page-header">
+<h1>{{ object.project }} <small>{{ object.date|date:"m/d/y" }}</small></h1>
+</div>
 
+<div class="panel panel-primary details-panel">
+    <div class="panel-heading"><h2 class="panel-title ">Details</h2></div>
+    <table class="table">
+    {% if object.category %}
+        <tr><th scope="row">Category</th><td>{{ object.category }}</td></tr>
+    {% endif %}
+    {% if object.partner %}
+        <tr><th scope="row">Partner</th><td>{{ object.partner }}</td></tr>
+    {% endif %}
+    {% if object.duration %}
+        <tr><th scope="row">Hours</th><td>{{ object.duration }}</td></tr>
+    {% endif %}
+    {% if object.reference %}
+        <tr><th scope="row">Reference</th><td>{{ object.reference }}</td></tr>
+    {% endif %}
+    {% if object.parts %}
+        <tr><th scope="row">Parts</th><td>{{ object.parts }}</td></tr>
+    {% endif %}
+    </table>
+</div>
+
+<h2>{{ object.summary }}</h2>
+
+{{ object.notes|linebreaks }}
+</div>
+
+<div class="images-footer"><div class="container">
+    {% if images %}
+    <div class="row">
+        {% for image in images %}
+        <div class="col-sm-3">
+            <div class="thumbnail">
+                <a href="{{ image.url }}"><img src="{{ image.url }}" /></a>
+                {% if image.caption %}
+                    <div class="caption">{{ image.caption }} </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div></div>
 {% endblock %}
