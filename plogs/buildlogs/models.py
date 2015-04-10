@@ -63,7 +63,7 @@ class Project(models.Model):
     def __unicode__(self):
         return "%s" % self.plane
 
-class BuildLogStatisticsManager(models.Model):
+class BuildLogStatisticsManager(models.Manager):
     def for_project(self, project):
         statistics = BuildLog.objects.filter(project=project).aggregate(hours=models.Sum('duration'), sessions=models.Count('id'))
 
@@ -88,10 +88,11 @@ class BuildLog(models.Model):
     summary = models.CharField(max_length=255, blank=True)
     notes = models.TextField(blank=True)
 
+    objects = models.Manager()
     statistics = BuildLogStatisticsManager()
 
     def __unicode__(self):
-        return self.summary or "(no summary)"
+        return "%d %s" % (self.log_id, self.summary or "(no summary)")
 
     def get_absolute_url(self):
         return reverse('build:view',
@@ -106,9 +107,9 @@ class BuildLog(models.Model):
         if self.log_id is None:
             # Grab the highest current index (if it exists)
             try:
-                recent = BuildLog.objects.filter(project=self.project).order_by('-log_id').first()
+                recent = BuildLog.objects.filter(project=self.project).latest('log_id')
                 self.log_id = recent.log_id + 1
-            except AttributeError:
+            except BuildLog.DoesNotExist:
                 self.log_id = 1
 
         if self.duration is None:
@@ -120,8 +121,8 @@ class BuildLog(models.Model):
         unique_together = ('project', 'log_id')
 
 class BuildLogImageManager(models.Manager):
-    def from_build_new(self):
-        return self.filter(build=None)
+    def from_build_new(self, project):
+        return self.filter(project=project, build=None)
 
     def for_build(self, build):
         return self.filter(build=build)
@@ -139,14 +140,16 @@ class BuildLogImage(models.Model):
 
     objects = BuildLogImageManager()
 
+    def __unicode__(self):
+        return "%s (%s)" % (self.caption, self.url)
     def save(self, *args, **kwargs):
         """Custom save logic. We want to have a per-project image id (instead of per-table)"""
         if self.image_id is None:
             # Grab the highest current index (if it exists)
             try:
-                recent = BuildLogImage.objects.filter(project=self.project).order_by('-image_id').first()
+                recent = BuildLogImage.objects.filter(project=self.project).latest('image_id')
                 self.image_id = recent.image_id + 1
-            except AttributeError:
+            except BuildLogImage.DoesNotExist:
                 self.image_id = 1
 
         super(BuildLogImage, self).save(*args, **kwargs)

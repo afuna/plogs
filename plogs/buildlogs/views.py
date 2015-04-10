@@ -39,7 +39,7 @@ class BuildLogNew(BuildLogBase, CreateView):
         buildlog.save()
 
         # now make sure all the images have this buildlog
-        images = BuildLogImage.objects.from_build_new()
+        images = BuildLogImage.objects.from_build_new(buildlog.project)
         for image in images:
             image.build = buildlog
             image.save()
