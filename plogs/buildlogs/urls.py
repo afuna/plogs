@@ -14,6 +14,6 @@ urlpatterns = patterns('',
         url(r'^partners/$', views.PartnerList.as_view(), name='partner_list'),
         url(r'^partners/new/$', views.PartnerNew.as_view(), name='partner_new'),
 
-        url(r'^(?P<project_name>\w+)/', include(build_urls)),
+        url(r'^(?P<project_name>[\w-]+)/', include(build_urls)),
 )
 
