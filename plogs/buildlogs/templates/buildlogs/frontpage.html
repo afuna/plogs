@@ -1,28 +1,12 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content_full_width %}
-<div class="jumbotron">
-  <div class="container">
-  <div class="row">
-    <h1 class="col-xs-12 col-sm-3">{{ project_name }} </h1>
-    <div class="col-xs-4 col-sm-2 text-center"><span class="stat-number">{{ stats.hours|floatformat:0 }}</span><p>hours</p></div>
-    <div class="col-xs-4 col-sm-2 text-center"><span class="stat-number">{{ stats.sessions }}</span><p>sessions</p></div>
-    <div class="col-xs-4 col-sm-2 text-center"><span class="stat-number">{{ stats.dollars }}</span><p>dollars</p></div>
-  </div>
-  </div>
-</div>
+<div ng-view></div>
+{% endblock %}
 
-<div class="container">
 
-<div class="row">
-    <div class="col-sm-offset-3 col-sm-3">
-        <p class="text-center"><a class="btn btn-primary btn-lg" href="{% url 'build:new' project_name=project_name username=user.username %}" role="button">Log Build Session</a></p>
-    </div>
-    <div class="col-sm-3">
-        <p class="text-center"><a class="btn btn-default btn-lg" href="#" role="button">Log Expense</a></p>
-    </div>
-</div>
-
-</div>
-
+{% block page_scripts %}
+<script src="{% static 'assets/buildlogs/js/index.module.js' %}"></script>
+<script src="{% static 'assets/buildlogs/js/logs.module.js' %}"></script>
 {% endblock %}
