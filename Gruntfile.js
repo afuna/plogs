@@ -38,24 +38,20 @@ module.exports = function(grunt) {
                     }
                 ]
             },
-            js: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= vendor_assets %>',
-                        src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular/*'],
-                        dest: '<%= compiled_assets %>/vendor'
-                    },
-                    {
-                        expand: true,
-                        cwd: "plogs",
-                        src: '*/src/js/*',
-                        dest: '<%= compiled_assets %>',
-                        rename: function(dest, src) {
-                            return dest + "/" + src.replace("src/", "");
-                        }
-                    }
-                ]
+            vendorjs: {
+                expand: true,
+                cwd: '<%= vendor_assets %>',
+                src: ['bootstrap/dist/js/*', 'jquery/dist/*'],
+                dest: '<%= compiled_assets %>/vendor'
+            },
+            appjs: {
+                expand: true,
+                cwd: "plogs",
+                src: ['*/src/js/*'],
+                dest: '<%= compiled_assets %>',
+                rename: function(dest, src) {
+                    return dest + "/" + src.replace("src/", "");
+                }
             },
             fonts: {
                 expand: true,
@@ -72,21 +68,30 @@ module.exports = function(grunt) {
         watch: {
             less: {
                 options: {
-                    livereload: true
+                    livereload: true,
+                    spawn: false
                 },
                 files: ['plogs/**/src/less/**/*.less'],
                 tasks: ['less:compile']
             },
             js: {
                 options: {
-                    livereload: true
+                    livereload: true,
+                    spawn: false
                 },
                 files: 'plogs/**/src/js/**.js',
-                tasks: ['copy:js']
+                tasks: ['copy:appjs']
             }
         },
         vendor_assets: "plogs/main/src/vendor",
         compiled_assets: "plogs/main/static/assets"
+    });
+
+    // on watch events only copy the changed file
+    grunt.event.on('watch', function (action, filepath, target) {
+        if (target === "js") {
+            grunt.config('copy.appjs.src', filepath.replace('plogs/', ''));
+        }
     });
 
     grunt.loadNpmTasks('grunt-bower-task');
@@ -97,7 +102,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('install', ['bower:install']);
     grunt.registerTask('dist-css', ['copy:vendor', 'less:compile']);
-    grunt.registerTask('dist-js', ['copy:js']);
+    grunt.registerTask('dist-js', ['copy:vendorjs', 'copy:appjs']);
     grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js']);
     grunt.registerTask('default', ['install', 'dist']);
 };
