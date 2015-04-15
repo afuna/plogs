@@ -43,7 +43,7 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: '<%= vendor_assets %>',
-                        src: ['bootstrap/dist/js/*', 'jquery/dist/*'],
+                        src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular/*'],
                         dest: '<%= compiled_assets %>/vendor'
                     },
                     {
@@ -71,10 +71,16 @@ module.exports = function(grunt) {
 
         watch: {
             less: {
+                options: {
+                    livereload: true
+                },
                 files: ['plogs/**/src/less/**/*.less'],
                 tasks: ['less:compile']
             },
             js: {
+                options: {
+                    livereload: true
+                },
                 files: 'plogs/**/src/js/**.js',
                 tasks: ['copy:js']
             }
