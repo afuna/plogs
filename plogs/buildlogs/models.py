@@ -67,6 +67,9 @@ class BuildLogStatisticsManager(models.Manager):
     def for_project(self, project):
         statistics = BuildLog.objects.filter(project=project).aggregate(hours=models.Sum('duration'), sessions=models.Count('id'))
 
+        if statistics['hours'] is None:
+            statistics['hours'] = 0
+
         # FIXME: add gathering of these statistics
         statistics['dollars'] = 0
 
