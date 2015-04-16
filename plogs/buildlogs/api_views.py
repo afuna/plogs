@@ -30,7 +30,7 @@ class ActiveProjectViewSet(viewsets.ViewSet):
 
             "build_new_url": reverse('build:new', kwargs={
                 "project_name": project.plane.kit.model,
-                "username": request.user.username,
+                "username": request.user.username
                 }, request=request),
 
             "expense_new_url": "",
