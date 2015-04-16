@@ -22,7 +22,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         """
         return reverse('api.build:user-projects-detail',
                        args=[obj.plane.owner.username,
-                             obj.id
+                             obj.id,
+                             "json",
                             ],
                         request=self.context['request'])
 
@@ -32,7 +33,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         """
         return reverse('api.build:project-buildlogs-list',
                        args=[obj.plane.owner.username,
-                             obj.id
+                             obj.id,
+                             "json",
                             ],
                         request=self.context['request'])
 
@@ -67,6 +69,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
         return reverse('api.build:project-buildlogs-detail',
                        args=[obj.project.plane.owner.username,
                              obj.project.id,
-                             obj.log_id
+                             obj.log_id,
+                             "json",
                             ],
                         request=self.context['request'])
