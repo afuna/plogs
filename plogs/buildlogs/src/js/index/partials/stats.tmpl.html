@@ -1,15 +1,15 @@
 <div class="row">
     <div class="col-xs-12 col-sm-3 text-right">
-        <h1>{{ project.name }}</h1>
-        <a ng-href="{{project.url}}" class="text-right">View all logs</a>
+        <h1>{{ project.project.name }}</h1>
+        <a ng-href="{{project.project.buildlogs_url}}" class="text-right">View all logs</a>
     </div>
     <div class="col-xs-4 col-sm-2 text-center">
-        <span class="stat-number">{{ projectInfo.stats.hours | number }}</span><p>hours</p>
+        <span class="stat-number">{{ project.stats.hours | number }}</span><p>hours</p>
     </div>
     <div class="col-xs-4 col-sm-2 text-center">
-        <span class="stat-number">{{ projectInfo.stats.sessions | number }}</span><p>sessions</p>
+        <span class="stat-number">{{ project.stats.sessions | number }}</span><p>sessions</p>
     </div>
     <div class="col-xs-4 col-sm-2 text-center">
-        <span class="stat-number">{{ projectInfo.stats.dollars | number }}</span><p>dollars</p>
+        <span class="stat-number">{{ project.stats.dollars | number }}</span><p>dollars</p>
     </div>
   </div>

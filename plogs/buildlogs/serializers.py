@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse
+from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from plogs.main.serializers import UserSerializer
@@ -23,7 +23,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         return reverse('api.build:user-projects-detail',
                        args=[obj.plane.owner.username,
                              obj.id
-                            ])
+                            ],
+                        request=self.context['request'])
 
     def get_buildlogs_url(self, obj):
         """
@@ -32,7 +33,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         return reverse('api.build:project-buildlogs-list',
                        args=[obj.plane.owner.username,
                              obj.id
-                            ])
+                            ],
+                        request=self.context['request'])
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -66,4 +68,5 @@ class BuildLogSerializer(serializers.ModelSerializer):
                        args=[obj.project.plane.owner.username,
                              obj.project.id,
                              obj.log_id
-                            ])
+                            ],
+                        request=self.context['request'])
