@@ -61,7 +61,7 @@ module.exports = function(grunt) {
             appjs: {
                 expand: true,
                 cwd: "plogs",
-                src: ['*/src/js/*', '*/src/js/*/partials/*', '*/src/templates/**'],
+                src: ['*/src/js/*', '*/src/js/*/partials/*', '*/src/views/**'],
                 dest: '<%= compiled_assets %>',
                 rename: function(dest, src) {
                     return dest + "/" + src.replace("src/", "");
@@ -97,8 +97,8 @@ module.exports = function(grunt) {
                     'plogs/**/src/js/*.js',
                     'plogs/**/src/js/**/**.js',
                     'plogs/**/src/js/**/*.tmpl.html',
-                    'plogs/**/src/templates/*.html',
-                    'plogs/**/src/templates/**/*.html'
+                    'plogs/**/src/views/*.html',
+                    'plogs/**/src/views/**/*.html'
                     ],
                 tasks: ['concat:modules', 'copy:appjs']
             }

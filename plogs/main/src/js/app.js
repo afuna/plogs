@@ -11,7 +11,7 @@
     .config(function ($routeProvider, assetsRoot) {
         $routeProvider
             .when("/", {
-                templateUrl: assetsRoot + '/buildlogs/templates/frontpage.html',
+                templateUrl: assetsRoot + '/buildlogs/views/frontpage.html',
                 controller: 'IndexController',
                 controllerAs: 'page'
             })
