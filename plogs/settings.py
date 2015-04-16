@@ -17,6 +17,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'rest_framework',
+    'rest_framework_extensions',
     'plogs.main',
     'plogs.planes',
     'plogs.buildlogs',
@@ -101,6 +103,16 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+# Rest Framework
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'PAGE_SIZE': 20
+}
 
 # Errors
 if os.environ.get('ADMIN_EMAIL'):

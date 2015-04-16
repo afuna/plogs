@@ -6,6 +6,11 @@ app_urls = [
     url(r'^build/', include('plogs.buildlogs.urls', namespace='build', app_name='buildlogs')),
 ]
 
+api_urls = [
+    url(r'^', include('plogs.planes.api_urls', namespace='api.planes', app_name='planes')),
+    url(r'^', include('plogs.buildlogs.api_urls', namespace='api.build', app_name='buildlogs')),
+];
+
 urlpatterns = patterns('',
     # Examples:
     # url(r'^$', 'plogs.views.home', name='home'),
@@ -15,4 +20,5 @@ urlpatterns = patterns('',
     url(r'^', include('plogs.main.urls')),
     url(r'^people/(?P<username>\w+)/', include(app_urls)),
 
+    url(r'^api/', include(api_urls)),
 )
