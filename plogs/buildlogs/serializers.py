@@ -1,3 +1,4 @@
+from django.template.defaultfilters import linebreaksbr
 from rest_framework.reverse import reverse
 from rest_framework import serializers
 
@@ -79,12 +80,14 @@ class BuildLogSerializer(serializers.ModelSerializer):
                             ],
                         request=self.context['request'])
 
+class BuildLogImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BuildLogImage
+        fields = ('url', 'caption')
+
 class BuildLogDetailSerializer(BuildLogSerializer):
-    images = serializers.SlugRelatedField(
-        many = True,
-        read_only = True,
-        slug_field = 'url'
-    )
+    images = BuildLogImageSerializer(many=True, read_only=True)
+    notes = serializers.SerializerMethodField()
 
     class Meta():
       model = models.BuildLog
@@ -92,3 +95,5 @@ class BuildLogDetailSerializer(BuildLogSerializer):
                 'duration', 'reference', 'parts', 'summary', 'api_url',
                 'notes', 'images')
 
+    def get_notes(self, obj):
+        return linebreaksbr(obj.notes, autoescape=True)
