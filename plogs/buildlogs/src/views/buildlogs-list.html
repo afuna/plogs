@@ -1,5 +1,5 @@
 <div class="container">
-<h1>{{page.project.name}} build logs <small>({{page.numBuildlogs}} total)</small></h1>
+<h1 ng-cloak>{{page.project.name}} build logs <br><small ng-show="page.numBuildlogs >0">{{page.numBuildlogs}} total</small></h1>
 <ul class="list-unstyled">
 <li ng-repeat="log in page.buildlogs">
     <p>
