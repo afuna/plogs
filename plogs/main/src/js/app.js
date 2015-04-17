@@ -21,7 +21,9 @@
                 controllerAs: 'page'
             })
             .when("/people/:username/projects/:project_id/buildlogs/:log_id", {
-
+                templateUrl: assetsRoot + '/buildlogs/views/buildlogs-detail.html',
+                controller: 'BuildLogDetailController',
+                controllerAs: 'page'
             })
             .otherwise({
                 redirectTo: "/"
