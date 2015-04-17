@@ -4,10 +4,13 @@
 <li ng-repeat="log in page.buildlogs">
     <p>
         <a ng-href="#{{page.basePath}}/{{log.log_id}}">{{log.summary || "(no summary)"}}</a>
-        <span class="label label-default">{{log.category}}</span>
+        <br>
+        <span>{{log.category}}</span>
         <small class="text-muted">{{log.date | date:'shortDate' }}</small>
     </p>
-
 </li>
 </ul>
+
+<button ng-show="page.hasMore" class="btn btn-default" ng-click="page.loadMore()">More</button>
+
 </div>
