@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-xs-12 col-sm-3 text-right">
         <h1>{{ project.project.name }}</h1>
-        <a ng-href="{{project.project.buildlogs_url}}" class="text-right">View all logs</a>
+        <a ng-href="#/people/{{project.project.user}}/projects/{{project.project.id}}/buildlogs" class="text-right">View all logs</a>
     </div>
     <div class="col-xs-4 col-sm-2 text-center">
         <span class="stat-number">{{ project.stats.hours | number }}</span><p>hours</p>

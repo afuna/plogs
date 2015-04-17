@@ -1,5 +1,5 @@
 from rest_framework import viewsets, permissions
-from rest_framework_extensions.mixins import NestedViewSetMixin
+from rest_framework_extensions.mixins import NestedViewSetMixin, DetailSerializerMixin
 from rest_framework.reverse import reverse
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
@@ -38,7 +38,9 @@ class ActiveProjectViewSet(viewsets.ViewSet):
 
         return Response(data)
 
-class BuildLogViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+
+class BuildLogViewSet(DetailSerializerMixin, NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = models.BuildLog.objects.all()
     serializer_class = serializers.BuildLogSerializer
+    serializer_detail_class = serializers.BuildLogDetailSerializer
     lookup_field = 'log_id'
