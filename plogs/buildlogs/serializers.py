@@ -50,8 +50,14 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 class BuildLogSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
-    category = CategorySerializer()
-    partner = PartnerSerializer()
+    category = serializers.SlugRelatedField(
+        read_only = True,
+        slug_field = 'name'
+    )
+    partner = serializers.SlugRelatedField(
+        read_only = True,
+        slug_field = 'name'
+    )
 
     # resource urls
     api_url = serializers.SerializerMethodField()
@@ -59,8 +65,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BuildLog
         fields = ('log_id', 'project', 'category', 'partner', 'date',
-                  'duration', 'reference', 'parts', 'summary', 'notes',
-                  'api_url')
+                  'duration', 'reference', 'parts', 'summary', 'api_url')
 
     def get_api_url(self, obj):
         """
@@ -73,3 +78,17 @@ class BuildLogSerializer(serializers.ModelSerializer):
                              "json",
                             ],
                         request=self.context['request'])
+
+class BuildLogDetailSerializer(BuildLogSerializer):
+    images = serializers.SlugRelatedField(
+        many = True,
+        read_only = True,
+        slug_field = 'url'
+    )
+
+    class Meta():
+      model = models.BuildLog
+      fields = ('log_id', 'project', 'category', 'partner', 'date',
+                'duration', 'reference', 'parts', 'summary', 'api_url',
+                'notes', 'images')
+

@@ -1,2 +1,13 @@
 <div class="container">
+<h1>{{page.project.name}} build logs <small>({{page.numBuildlogs}} total)</small></h1>
+<ul class="list-unstyled">
+<li ng-repeat="log in page.buildlogs">
+    <p>
+        <a ng-href="#{{page.basePath}}/{{log.log_id}}">{{log.summary || "(no summary)"}}</a>
+        <span class="label label-default">{{log.category}}</span>
+        <small class="text-muted">{{log.date | date:'shortDate' }}</small>
+    </p>
+
+</li>
+</ul>
 </div>

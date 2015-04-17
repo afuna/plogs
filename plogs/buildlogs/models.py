@@ -136,7 +136,7 @@ class BuildLogImage(models.Model):
     caption = models.CharField(max_length=255, blank=True)
 
     # may have uploaded the image without having created the build yet
-    build = models.ForeignKey(BuildLog, null=True)
+    build = models.ForeignKey(BuildLog, null=True, related_name='images')
 
     # per project
     image_id = models.PositiveIntegerField()
