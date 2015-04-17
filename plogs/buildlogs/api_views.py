@@ -40,7 +40,7 @@ class ActiveProjectViewSet(viewsets.ViewSet):
 
 
 class BuildLogViewSet(DetailSerializerMixin, NestedViewSetMixin, viewsets.ModelViewSet):
-    queryset = models.BuildLog.objects.all()
+    queryset = models.BuildLog.objects.all().order_by('-date')
     serializer_class = serializers.BuildLogSerializer
     serializer_detail_class = serializers.BuildLogDetailSerializer
     lookup_field = 'log_id'
