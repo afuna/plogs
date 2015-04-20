@@ -1,29 +1,41 @@
-var app = angular.module('index.active-project.factory', []);
-app.factory('ActiveProjectFactory', function ActiveProjectFactory($q, $http) {
+var app = angular.module('index.project.factory', []);
+app.factory('ProjectFactory', function ProjectFactory($q, $http) {
     var exports = {};
 
+    var projects = {};
+    function cacheProject(project) {
+        projects[project.user + "/" + project.id] = project;
+    }
+    function getCachedProject(username, project_id) {
+        return projects[username + "/" + project_id];
+    }
+
     // for the project, we can afford to use the cached copy
-    var project;
-    exports.getProject = function() {
+    exports.getProject = function(username, project_id) {
         var deferred = $q.defer();
+
+        var project = getCachedProject(username, project_id);
         if (project) {
             deferred.resolve(project);
         } else {
-            exports.getProjectStats()
-                .then(function (response) {
-                    project = response.project;
-                    deferred.resolve(project);
-                });
+            $http.get('/api/people/'+username+'/projects/'+project_id+'.json')
+                .then(function(response) {
+                    cacheProject(response.data);
+                    deferred.resolve(response.data);
+                }, function(response) {
+                    deferred.reject(response.data);
+                })
         }
         return deferred.promise;
     };
 
     // for the stats, we want to check whenever we can
-    exports.getProjectStats = function () {
+    exports.getActiveProject = function () {
         var deferred = $q.defer();
 
         $http.get('/api/projects/active')
             .then(function (response) {
+                cacheProject(response.data.project);
                 deferred.resolve(response.data);
             }, function (response) {
                 deferred.reject(response.data);

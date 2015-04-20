@@ -1,6 +1,6 @@
 var app = angular.module('index', [
     'index.controller',
-    'index.active-project.factory',
+    'index.project.factory',
     'index.stats.directive',
     'plogsUtils'
 ])

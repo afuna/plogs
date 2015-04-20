@@ -1,5 +1,5 @@
 var app = angular.module('buildlogs.controller', []);
-app.controller('BuildLogsController', function BuildLogsController($routeParams, $location, BuildLog, ActiveProjectFactory) {
+app.controller('BuildLogsController', function BuildLogsController($routeParams, $location, BuildLog, ProjectFactory) {
     this.basePath = $location.path();
     this.buildlogs = [];
     this.numBuildlogs = 0;
@@ -17,7 +17,7 @@ app.controller('BuildLogsController', function BuildLogsController($routeParams,
                 this.hasMore = this.buildlogs.length < this.numBuildlogs;
             }));
 
-        ActiveProjectFactory.getProject()
+        ProjectFactory.getProject($routeParams.username, $routeParams.project_id)
             .then(angular.bind(this, function then(data) {
                 this.project = data;
             }));

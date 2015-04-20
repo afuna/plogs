@@ -1,6 +1,6 @@
 var app = angular.module('index.controller', []);
-app.controller('IndexController', function (ActiveProjectFactory, AuthenticationFactory) {
-    this.project = ActiveProjectFactory.stubProject();
+app.controller('IndexController', function (ProjectFactory, AuthenticationFactory) {
+    this.project = ProjectFactory.stubProject();
 
     AuthenticationFactory.isAuthenticated()
         .then(angular.bind(this, function then(data) {
@@ -11,7 +11,7 @@ app.controller('IndexController', function (ActiveProjectFactory, Authentication
             }
         }));
 
-    ActiveProjectFactory.getProjectStats()
+    ProjectFactory.getActiveProject()
         .then(angular.bind(this, function then(data) {
             this.project = data;
         }));
