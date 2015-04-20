@@ -22,26 +22,18 @@ app.factory('ProjectFactory', function ProjectFactory($q, $http) {
                 .then(function(response) {
                     cacheProject(response.data);
                     deferred.resolve(response.data);
-                }, function(response) {
-                    deferred.reject(response.data);
-                })
+                });
         }
         return deferred.promise;
     };
 
     // for the stats, we want to check whenever we can
     exports.getActiveProject = function () {
-        var deferred = $q.defer();
-
-        $http.get('/api/projects/active')
+        return $http.get('/api/projects/active')
             .then(function (response) {
                 cacheProject(response.data.project);
-                deferred.resolve(response.data);
-            }, function (response) {
-                deferred.reject(response.data);
+                return response.data;
             });
-
-        return deferred.promise;
     };
 
     /*
