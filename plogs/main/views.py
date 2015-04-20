@@ -25,7 +25,9 @@ def signup(request):
 
             post_create.send(sender=User, user=user)
 
-            return redirect(reverse('planes:new'))
+            return redirect(reverse('planes:new', kwargs={
+                "username": user.username
+            }))
     else:
         form = forms.UserCreationForm()
 

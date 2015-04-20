@@ -31,7 +31,7 @@ def new(request, *args, **kwargs):
 
     context = {
         'form': form,
-        'form_url': reverse_lazy('planes:new'),
+        'form_url': reverse_lazy('planes:new', kwargs={"username": request.user.username}),
         'form_button': 'Start Logging',
         'title': 'Add Your Plane Kit',
     }
