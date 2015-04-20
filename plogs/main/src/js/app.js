@@ -5,13 +5,14 @@
         'ngRoute',
 
         'plogsUtils',
+        'auth',
         'index',
         'buildlogs'
     ])
     .config(function ($routeProvider, assetsRoot) {
         $routeProvider
             .when("/", {
-                templateUrl: assetsRoot + '/buildlogs/views/frontpage.html',
+                templateUrl: assetsRoot + '/main/views/index.html',
                 controller: 'IndexController',
                 controllerAs: 'page'
             })

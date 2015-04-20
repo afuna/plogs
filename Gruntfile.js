@@ -35,6 +35,7 @@ module.exports = function(grunt) {
             modules: {
                 expand: true,
                 files: {
+                    '<%= compiled_assets %>/main/js/auth.module.js': 'plogs/main/src/js/auth/*',
                     '<%= compiled_assets %>/buildlogs/js/index.module.js': 'plogs/buildlogs/src/js/index/*',
                     '<%= compiled_assets %>/buildlogs/js/buildlogs.module.js': 'plogs/buildlogs/src/js/buildlogs/*'
                 }

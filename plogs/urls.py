@@ -7,6 +7,7 @@ app_urls = [
 ]
 
 api_urls = [
+    url(r'^', include('plogs.main.api_urls', namespace='api.plogs', app_name='main')),
     url(r'^', include('plogs.planes.api_urls', namespace='api.planes', app_name='planes')),
     url(r'^', include('plogs.buildlogs.api_urls', namespace='api.build', app_name='buildlogs')),
 ];
