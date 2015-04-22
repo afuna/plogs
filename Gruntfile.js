@@ -27,13 +27,28 @@ module.exports = function(grunt) {
             }
         },
 
+        concat: {
+            options: {
+                banner: ";(function(){\n 'use strict';",
+                footer: "})();"
+            },
+            modules: {
+                expand: true,
+                files: {
+                    '<%= compiled_assets %>/main/js/auth.module.js': 'plogs/main/src/js/auth/*',
+                    '<%= compiled_assets %>/buildlogs/js/index.module.js': 'plogs/buildlogs/src/js/index/*',
+                    '<%= compiled_assets %>/buildlogs/js/buildlogs.module.js': 'plogs/buildlogs/src/js/buildlogs/*'
+                }
+            }
+        },
+
         copy: {
             vendor: {
                 files: [
                     {
                         expand: true,
                         cwd: 'bower_components',
-                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*', 'bootstrap/dist/fonts/*'],
+                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*', 'bootstrap/dist/fonts/*', 'angular*/angular*.js'],
                         dest: '<%= vendor_assets %>'
                     }
                 ]
@@ -41,13 +56,13 @@ module.exports = function(grunt) {
             vendorjs: {
                 expand: true,
                 cwd: '<%= vendor_assets %>',
-                src: ['bootstrap/dist/js/*', 'jquery/dist/*'],
+                src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular*/angular*.js'],
                 dest: '<%= compiled_assets %>/vendor'
             },
             appjs: {
                 expand: true,
                 cwd: "plogs",
-                src: ['*/src/js/*'],
+                src: ['*/src/js/*', '*/src/js/*/partials/*', '*/src/views/**'],
                 dest: '<%= compiled_assets %>',
                 rename: function(dest, src) {
                     return dest + "/" + src.replace("src/", "");
@@ -79,8 +94,14 @@ module.exports = function(grunt) {
                     livereload: true,
                     spawn: false
                 },
-                files: 'plogs/**/src/js/**.js',
-                tasks: ['copy:appjs']
+                files: [
+                    'plogs/**/src/js/*.js',
+                    'plogs/**/src/js/**/**.js',
+                    'plogs/**/src/js/**/*.tmpl.html',
+                    'plogs/**/src/views/*.html',
+                    'plogs/**/src/views/**/*.html'
+                    ],
+                tasks: ['concat:modules', 'copy:appjs']
             }
         },
         vendor_assets: "plogs/main/src/vendor",
@@ -99,10 +120,11 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-concat');
 
     grunt.registerTask('install', ['bower:install']);
     grunt.registerTask('dist-css', ['copy:vendor', 'less:compile']);
-    grunt.registerTask('dist-js', ['copy:vendorjs', 'copy:appjs']);
+    grunt.registerTask('dist-js', ['copy:vendorjs', 'concat:modules', 'copy:appjs']);
     grunt.registerTask('dist', ['clean:dist', 'dist-css', 'copy:fonts', 'dist-js']);
     grunt.registerTask('default', ['install', 'dist']);
 };

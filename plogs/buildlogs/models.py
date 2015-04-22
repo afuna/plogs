@@ -67,6 +67,9 @@ class BuildLogStatisticsManager(models.Manager):
     def for_project(self, project):
         statistics = BuildLog.objects.filter(project=project).aggregate(hours=models.Sum('duration'), sessions=models.Count('id'))
 
+        if statistics['hours'] is None:
+            statistics['hours'] = 0
+
         # FIXME: add gathering of these statistics
         statistics['dollars'] = 0
 
@@ -133,7 +136,7 @@ class BuildLogImage(models.Model):
     caption = models.CharField(max_length=255, blank=True)
 
     # may have uploaded the image without having created the build yet
-    build = models.ForeignKey(BuildLog, null=True)
+    build = models.ForeignKey(BuildLog, null=True, related_name='images')
 
     # per project
     image_id = models.PositiveIntegerField()

@@ -1,10 +1,11 @@
-from rest_framework_extensions.routers import ExtendedDefaultRouter
 from plogs.main.api_views import UserViewSet
+from plogs.main.routers import NestedDefaultRouter
 from . import api_views as views
 
-router = ExtendedDefaultRouter(trailing_slash=False)
 
-people_router = router.register(r'people', UserViewSet)
+root_router = NestedDefaultRouter(trailing_slash=False)
+
+people_router = root_router.register(r'people', UserViewSet)
 
 projects_router = people_router.register(r'projects',
                         views.ProjectViewSet,
@@ -17,5 +18,6 @@ buildlogs_router = projects_router.register(
                         base_name='project-buildlogs',
                         parents_query_lookups=['project__plane__owner__username', 'project__id'])
 
+root_router.register(r'projects/active', views.ActiveProjectViewSet, base_name='project-active')
 
-urlpatterns = router.urls
+urlpatterns = root_router.urls

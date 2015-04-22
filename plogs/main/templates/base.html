@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 {% load bootstrap3 %}
 {% load static %}
-<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %}>
+<html{% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}"{% endif %} ng-app="plogs">
 
 <head>
     <meta charset="utf-8">
@@ -9,6 +9,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% block title %}Plogs{% endblock %}</title>
     <link type="text/css" href="{% static 'assets/css/plogs.css' %}" media="all" rel="stylesheet">
+    <style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+      display: none !important;
+    }
+    </style>
     {% block page_css %}{% endblock %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -29,7 +34,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Plogs</a>
+      <a class="navbar-brand" href="/#/">Plogs</a>
     </div>
 
     {% if user.is_authenticated %}
@@ -59,7 +64,15 @@
 
 <script type="text/javascript" src="{% static 'assets/vendor/jquery/dist/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'assets/vendor/bootstrap/dist/js/bootstrap.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/vendor/angular/angular.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/vendor/angular-route/angular-route.js'%}"></script>
+<script type="text/javascript" src="{% static 'assets/vendor/angular-resource/angular-resource.js'%}"></script>
+<script type="text/javascript" src="{% static 'assets/vendor/angular-sanitize/angular-sanitize.js'%}"></script>
+
+<script type="text/javascript" src="{% static 'assets/main/js/utils.js' %}"></script>
 {% block page_scripts %}{% endblock %}
+<script type="text/javascript" src="{% static 'assets/main/js/app.js' %}"></script>
+
 </body>
 
 </html>

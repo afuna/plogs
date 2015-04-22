@@ -1,0 +1,31 @@
+<div ng-show="!(page.auth_logged_in || page.auth_logged_out)" class="jumbotron">
+  <div class="container">
+    <div class=" loading">Loading...</div>
+  </div>
+</div>
+
+<div ng-if="page.auth_logged_in" >
+  <div class="jumbotron">
+    <div class="container">
+    <stats project="page.project"></stats>
+    </div>
+  </div>
+  <div class="container">
+      <div class="row">
+          <div class="col-sm-offset-3 col-sm-3">
+              <p class="text-center"><a class="btn btn-primary btn-lg" ng-href="{{page.project.build_new_url}}" role="button">Log Build Session</a></p>
+          </div>
+          <div class="col-sm-3">
+              <p class="text-center"><a class="btn btn-default btn-lg" ng-href="{{page.project.expense_new_url}}" role="button">Log Expense</a></p>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div ng-if="page.auth_logged_out" class="jumbotron">
+  <div class="container">
+    <h1>Build, Then Log</h1>
+    <p>Looking to build a plane? Log your progress here. Keep notes on each build session, remember how much things cost, what you got, where you got it from. Don't let any of that clutter your mind. Just go build your plane and have fun!</p>
+    <p><a class="btn btn-primary btn-lg" href="/signup" role="button">Sign up &raquo;</a></p>
+  </div>
+</div>

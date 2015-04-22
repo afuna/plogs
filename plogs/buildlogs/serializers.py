@@ -1,4 +1,5 @@
-from django.core.urlresolvers import reverse
+from django.template.defaultfilters import linebreaksbr
+from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from plogs.main.serializers import UserSerializer
@@ -22,8 +23,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         """
         return reverse('api.build:user-projects-detail',
                        args=[obj.plane.owner.username,
-                             obj.id
-                            ])
+                             obj.id,
+                             "json",
+                            ],
+                        request=self.context['request'])
 
     def get_buildlogs_url(self, obj):
         """
@@ -31,8 +34,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         """
         return reverse('api.build:project-buildlogs-list',
                        args=[obj.plane.owner.username,
-                             obj.id
-                            ])
+                             obj.id,
+                             "json",
+                            ],
+                        request=self.context['request'])
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,8 +51,14 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 class BuildLogSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
-    category = CategorySerializer()
-    partner = PartnerSerializer()
+    category = serializers.SlugRelatedField(
+        read_only = True,
+        slug_field = 'name'
+    )
+    partner = serializers.SlugRelatedField(
+        read_only = True,
+        slug_field = 'name'
+    )
 
     # resource urls
     api_url = serializers.SerializerMethodField()
@@ -55,8 +66,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BuildLog
         fields = ('log_id', 'project', 'category', 'partner', 'date',
-                  'duration', 'reference', 'parts', 'summary', 'notes',
-                  'api_url')
+                  'duration', 'reference', 'parts', 'summary', 'api_url')
 
     def get_api_url(self, obj):
         """
@@ -65,5 +75,25 @@ class BuildLogSerializer(serializers.ModelSerializer):
         return reverse('api.build:project-buildlogs-detail',
                        args=[obj.project.plane.owner.username,
                              obj.project.id,
-                             obj.log_id
-                            ])
+                             obj.log_id,
+                             "json",
+                            ],
+                        request=self.context['request'])
+
+class BuildLogImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.BuildLogImage
+        fields = ('url', 'caption')
+
+class BuildLogDetailSerializer(BuildLogSerializer):
+    images = BuildLogImageSerializer(many=True, read_only=True)
+    notes = serializers.SerializerMethodField()
+
+    class Meta():
+      model = models.BuildLog
+      fields = ('log_id', 'project', 'category', 'partner', 'date',
+                'duration', 'reference', 'parts', 'summary', 'api_url',
+                'notes', 'images')
+
+    def get_notes(self, obj):
+        return linebreaksbr(obj.notes, autoescape=True)

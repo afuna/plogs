@@ -1,0 +1,18 @@
+<div class="container">
+<div class="page-header">
+    <h1 ng-cloak>{{page.project.name}} build logs <small ng-show="page.numBuildlogs > 0">{{page.numBuildlogs}} total</small></h1>
+</div>
+<ul class="list-unstyled">
+<li ng-repeat="log in page.buildlogs">
+    <p>
+        <a ng-href="#{{page.basePath}}/{{log.log_id}}">{{log.summary || "(no summary)"}}</a>
+        <br>
+        <span>{{log.category}}</span>
+        <small class="text-muted">{{log.date | date:'shortDate' }}</small>
+    </p>
+</li>
+</ul>
+
+<button ng-show="page.hasMore" class="btn btn-default" ng-click="page.loadMore()">More</button>
+
+</div>
