@@ -7,7 +7,8 @@
         'plogsUtils',
         'auth',
         'index',
-        'buildlogs'
+        'buildlogs',
+        'breadcrumbs'
     ])
     .config(function ($routeProvider, assetsRoot) {
         $routeProvider

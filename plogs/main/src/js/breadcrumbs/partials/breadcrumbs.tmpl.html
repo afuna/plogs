@@ -1,0 +1,6 @@
+<ol class="breadcrumb">
+    <li ng-repeat="crumb in breadcrumbs.pages track by crumb.url" ng-class="{active: $last}">
+        <a ng-if="!$last" ng-href="{{crumb.url}}" ng-bind="crumb.title"></a>
+        <span ng-if="$last" ng-bind="crumb.title"></span>
+    </li>
+</ol>
