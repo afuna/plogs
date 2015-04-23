@@ -1,12 +1,13 @@
 {
-    "name": "plogs",
-    "version": "1.0.0",
-    "dependencies": {
-        "bootstrap": ">=3.0",
-        "angular": ">=1.3.15",
-        "angular-route": ">=1.3.15",
-        "angular-resource": ">=1.3.15",
-        "angular-sanitize": ">=1.3.15"
-    },
-    "private": true
+  "name": "plogs",
+  "version": "1.0.0",
+  "dependencies": {
+    "bootstrap": ">=3.0",
+    "angular": ">=1.3.15",
+    "angular-route": ">=1.3.15",
+    "angular-resource": ">=1.3.15",
+    "angular-sanitize": ">=1.3.15",
+    "angular-ui-select": "~0.11.2"
+  },
+  "private": true
 }

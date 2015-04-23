@@ -7,8 +7,13 @@
 
 
 {% block page_scripts %}
+<script src="{% static 'assets/vendor/angular-ui-select/dist/select.js' %}"></script>
 <script src="{% static 'assets/main/js/auth.module.js' %}"></script>
 <script src="{% static 'assets/main/js/breadcrumbs.module.js' %}"></script>
 <script src="{% static 'assets/buildlogs/js/index.module.js' %}"></script>
 <script src="{% static 'assets/buildlogs/js/buildlogs.module.js' %}"></script>
+{% endblock %}
+
+{% block page_css %}
+<link type="text/css" href="{% static 'assets/vendor/angular-ui-select/dist/select.css' %}" media="all" rel="stylesheet">
 {% endblock %}

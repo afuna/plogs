@@ -49,7 +49,8 @@ module.exports = function(grunt) {
                     {
                         expand: true,
                         cwd: 'bower_components',
-                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*', 'bootstrap/dist/fonts/*', 'angular*/angular*.js'],
+                        src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*',
+                              'bootstrap/dist/fonts/*', 'angular*/angular*.js', 'angular-ui-select/dist/*'],
                         dest: '<%= vendor_assets %>'
                     }
                 ]
@@ -57,7 +58,7 @@ module.exports = function(grunt) {
             vendorjs: {
                 expand: true,
                 cwd: '<%= vendor_assets %>',
-                src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular*/angular*.js'],
+                src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular*/angular*.js', 'angular-ui-select/dist/*'],
                 dest: '<%= compiled_assets %>/vendor'
             },
             appjs: {
