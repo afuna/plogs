@@ -60,8 +60,8 @@ class BuildLogSerializer(serializers.ModelSerializer):
         slug_field = 'name'
     )
 
-    # system-generated fields
-    log_id = serializers.IntegerField(required=False)
+    # system-generated
+    log_id = serializers.IntegerField(required=False, read_only=True)
 
     # resource urls
     api_url = serializers.SerializerMethodField()
@@ -70,7 +70,10 @@ class BuildLogSerializer(serializers.ModelSerializer):
         model = models.BuildLog
         fields = ('log_id', 'project', 'category', 'partner', 'date',
                   'duration', 'reference', 'parts', 'summary', 'api_url')
-        read_only_fields = ('log_id')
+
+        # disable automatic validators -- the UniqueTogetherValidation
+        # for log_id was causing log_id to be required on post (we'll set it later)
+        validators = []
 
     def get_api_url(self, obj):
         """
