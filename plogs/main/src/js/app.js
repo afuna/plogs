@@ -34,5 +34,9 @@
             .otherwise({
                 redirectTo: "/"
             });
+    })
+    .config(function ($httpProvider) {
+        $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+        $httpProvider.defaults.xsrfCookieName = 'csrftoken';
     });
 })();
