@@ -18,6 +18,16 @@ buildlogs_router = projects_router.register(
                         base_name='project-buildlogs',
                         parents_query_lookups=['project__plane__owner__username', 'project__id'])
 
+people_router.register(r'categories',
+                       views.CategoryViewSet,
+                       base_name='user-categories',
+                       parents_query_lookups=['user__username'])
+
+people_router.register(r'partners',
+                       views.PartnerViewSet,
+                       base_name='user-partners',
+                       parents_query_lookups=['user__username'])
+
 root_router.register(r'projects/active', views.ActiveProjectViewSet, base_name='project-active')
 
 urlpatterns = root_router.urls

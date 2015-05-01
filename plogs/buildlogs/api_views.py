@@ -44,3 +44,15 @@ class BuildLogViewSet(DetailSerializerMixin, NestedViewSetMixin, viewsets.ModelV
     serializer_class = serializers.BuildLogSerializer
     serializer_detail_class = serializers.BuildLogDetailSerializer
     lookup_field = 'log_id'
+
+
+class CategoryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = models.Category.objects.all()
+    serializer_class = serializers.CategorySerializer
+    lookup_field = 'name'
+
+
+class PartnerViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
+    queryset = models.Partner.objects.all()
+    serializer_class = serializers.PartnerSerializer
+    lookup_field = 'name'

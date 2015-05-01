@@ -1,7 +1,10 @@
 var app = angular.module('buildlogs', [
     'buildlogs.factory',
+    'buildlogs.categories.factory',
+    'buildlogs.partners.factory',
     'buildlogs.controller',
     'buildlogDetail.controller',
+    'buildlogForm.controller',
     'buildlogTitle.directive',
     'buildlogMetadata.directive',
     'buildlogText.directive',

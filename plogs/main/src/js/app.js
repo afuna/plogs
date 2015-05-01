@@ -11,18 +11,22 @@
         'breadcrumbs'
     ])
     .config(function ($routeProvider, assetsRoot) {
+        var buildlogsPath = '/people/:username/projects/:project_id/buildlogs'
         $routeProvider
             .when("/", {
                 templateUrl: assetsRoot + '/main/views/index.html',
                 controller: 'IndexController',
                 controllerAs: 'page'
             })
-            .when("/people/:username/projects/:project_id/buildlogs", {
+            .when(buildlogsPath, {
                 templateUrl: assetsRoot + '/buildlogs/views/buildlogs-list.html',
                 controller: 'BuildLogsController',
                 controllerAs: 'page'
             })
-            .when("/people/:username/projects/:project_id/buildlogs/:log_id", {
+            .when(buildlogsPath + '/new', {
+                templateUrl: assetsRoot + '/buildlogs/views/buildlogs-form.html'
+            })
+            .when(buildlogsPath + '/:log_id', {
                 templateUrl: assetsRoot + '/buildlogs/views/buildlogs-detail.html',
                 controller: 'BuildLogDetailController',
                 controllerAs: 'page'
