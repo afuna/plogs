@@ -60,6 +60,10 @@ class Project(models.Model):
 
     objects = ProjectManager()
 
+    def owner(self):
+        """Return the user that owns this project."""
+        return self.plane.owner
+
     def __unicode__(self):
         return "%s" % self.plane
 
@@ -93,6 +97,9 @@ class BuildLog(models.Model):
 
     objects = models.Manager()
     statistics = BuildLogStatisticsManager()
+
+    def owner(self):
+        return self.project.owner()
 
     def __unicode__(self):
         return "%d %s" % (self.log_id, self.summary or "(no summary)")

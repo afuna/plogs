@@ -4,7 +4,7 @@ from rest_framework.reverse import reverse
 from rest_framework.decorators import list_route
 from rest_framework.response import Response
 
-from . import models, serializers
+from . import models, serializers, api_permissions
 
 class ProjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = models.Project.objects.all()
@@ -40,6 +40,7 @@ class ActiveProjectViewSet(viewsets.ViewSet):
 
 
 class BuildLogViewSet(DetailSerializerMixin, NestedViewSetMixin, viewsets.ModelViewSet):
+    permission_classes = [api_permissions.OwnerCanEditPermission]
     queryset = models.BuildLog.objects.all().order_by('-date')
     serializer_class = serializers.BuildLogSerializer
     serializer_detail_class = serializers.BuildLogDetailSerializer
