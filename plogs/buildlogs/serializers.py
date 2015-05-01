@@ -60,6 +60,9 @@ class BuildLogSerializer(serializers.ModelSerializer):
         slug_field = 'name'
     )
 
+    # system-generated fields
+    log_id = serializers.IntegerField(required=False)
+
     # resource urls
     api_url = serializers.SerializerMethodField()
 
@@ -67,6 +70,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
         model = models.BuildLog
         fields = ('log_id', 'project', 'category', 'partner', 'date',
                   'duration', 'reference', 'parts', 'summary', 'api_url')
+        read_only_fields = ('log_id')
 
     def get_api_url(self, obj):
         """
