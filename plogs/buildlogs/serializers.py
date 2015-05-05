@@ -1,9 +1,10 @@
 from django.template.defaultfilters import linebreaksbr
 from rest_framework.reverse import reverse
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from plogs.main.serializers import UserSerializer
 from . import models
+from .fields import GetOrCreateSlugRelatedField
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='plane.owner.username')
@@ -51,13 +52,14 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 class BuildLogSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
-    category = serializers.SlugRelatedField(
-        read_only = True,
+    category = GetOrCreateSlugRelatedField(
+        queryset = models.Category.objects.all(),
         slug_field = 'name'
     )
-    partner = serializers.SlugRelatedField(
-        read_only = True,
-        slug_field = 'name'
+    partner = GetOrCreateSlugRelatedField(
+        queryset = models.Partner.objects.all(),
+        slug_field = 'name',
+        required = False
     )
 
     # system-generated
@@ -86,6 +88,16 @@ class BuildLogSerializer(serializers.ModelSerializer):
                              "json",
                             ],
                         request=self.context['request'])
+
+    def validate_project(self, value):
+        project_data = self.initial_data['project']
+        return models.Project.objects.for_user(self.context['request'].user).get(id=project_data['id'])
+
+    def validate_reference(self, value):
+        return ', '.join(self.initial_data["reference"])
+
+    def validate_parts(self, value):
+        return ', '.join(self.initial_data["parts"])
 
 class BuildLogImageSerializer(serializers.ModelSerializer):
     class Meta:

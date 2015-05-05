@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <div class="form-group">
             <label for="hours" class="control-label">Hours</label>
-            <input class="form-control" type="number" step="any" min="0" ng-model="buildlog.form.hours" id="hours" name="hours" type="text">
+            <input class="form-control" type="number" step="any" min="0" ng-model="buildlog.form.duration" id="duration" name="duration" type="text">
         </div>
     </div>
 
@@ -20,8 +20,8 @@
         <div class="form-group">
             <label for="category" class="control-label">Category</label>
             <combobox ui-select tagging="buildlog.processNewCategory" tagging-tokens="ENTER" tagging-label="('new')" ng-model="buildlog.form.category" theme="bootstrap">
-              <ui-select-match placeholder="{{$select.selected ? $select.selected.name : 'Select category...'}}">{{$select.selected.name}}</ui-select-match>
-              <ui-select-choices repeat="category in buildlog.categories | filter: $select.search">
+              <ui-select-match placeholder="{{$select.selected.name || 'Select category...'}}">{{$select.selected.name}}</ui-select-match>
+              <ui-select-choices repeat="category.name as category in buildlog.categories | filter: $select.search">
                 <div ng-bind-html="category.name | highlight: $select.search"></div>
               </ui-select-choices>
             </combobox>
@@ -33,8 +33,8 @@
 
     <div class="col-md-3">
     <div class="form-group">
-        <label for="manual" class="control-label">Manual</label>
-        <ui-select multiple tagging tagging-tokens="ENTER|," tagging-label="" search-enabled="false" ng-model="buildlog.form.manual" theme="bootstrap" class="ui-select-no-choices">
+        <label for="reference" class="control-label">Manual</label>
+        <ui-select multiple tagging tagging-tokens="ENTER|," tagging-label="" search-enabled="false" ng-model="buildlog.form.reference" theme="bootstrap" class="ui-select-no-choices">
           <ui-select-match placeholder="{{$item}}">{{$item}}</ui-select-match>
           <ui-select-choices repeat="item in []">
           </ui-select-choices>
@@ -58,8 +58,8 @@
         <div class="form-group">
             <label for="partner" class="control-label">Partner</label>
             <combobox ui-select tagging="buildlog.processNewPartner" tagging-tokens="ENTER" tagging-label="('new')" ng-model="buildlog.form.partner" theme="bootstrap">
-              <ui-select-match placeholder="{{$select.selected ? $select.selected.name : 'Select partner...'}}">{{$select.selected.name}}</ui-select-match>
-              <ui-select-choices repeat="partner in buildlog.partners | filter: $select.search">
+              <ui-select-match placeholder="{{$select.selected.name || 'Select partner...'}}">{{$select.selected.name}}</ui-select-match>
+              <ui-select-choices repeat="partner.name as partner in buildlog.partners | filter: $select.search">
                 <div ng-bind-html="partner.name | highlight: $select.search"></div>
               </ui-select-choices>
             </combobox>
