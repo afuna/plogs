@@ -73,10 +73,6 @@ class BuildLogSerializer(serializers.ModelSerializer):
         fields = ('log_id', 'project', 'category', 'partner', 'date',
                   'duration', 'reference', 'parts', 'summary', 'api_url')
 
-        # disable automatic validators -- the UniqueTogetherValidation
-        # for log_id was causing log_id to be required on post (we'll set it later)
-        validators = []
-
     def get_api_url(self, obj):
         """
         Return the URL for the detail view of this buildlog.
@@ -104,9 +100,18 @@ class BuildLogImageSerializer(serializers.ModelSerializer):
         model = models.BuildLogImage
         fields = ('url', 'caption')
 
+class HTMLTextField(serializers.CharField):
+    """
+    Serializes text that contains HTML for display
+    """
+    def to_representation(self, value):
+        value = super(HTMLTextField, self).to_representation(value)
+        return linebreaksbr(value, autoescape=True)
+
+
 class BuildLogDetailSerializer(BuildLogSerializer):
     images = BuildLogImageSerializer(many=True, read_only=True)
-    notes = serializers.SerializerMethodField()
+    notes = HTMLTextField()
 
     class Meta():
       model = models.BuildLog
@@ -114,5 +119,6 @@ class BuildLogDetailSerializer(BuildLogSerializer):
                 'duration', 'reference', 'parts', 'summary', 'api_url',
                 'notes', 'images')
 
-    def get_notes(self, obj):
-        return linebreaksbr(obj.notes, autoescape=True)
+      # disable automatic validators -- the UniqueTogetherValidation
+      # for log_id was causing log_id to be required on post (we'll set it later)
+      validators = []

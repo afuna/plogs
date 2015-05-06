@@ -46,6 +46,11 @@ class BuildLogViewSet(DetailSerializerMixin, NestedViewSetMixin, viewsets.ModelV
     serializer_detail_class = serializers.BuildLogDetailSerializer
     lookup_field = 'log_id'
 
+    def get_serializer_class(self):
+        if self.action == "create":
+            return self.serializer_detail_class
+        return super(BuildLogViewSet, self).get_serializer_class()
+
 
 class CategoryViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = models.Category.objects.all()
