@@ -1,10 +1,10 @@
 from django.template.defaultfilters import linebreaksbr
 from rest_framework.reverse import reverse
-from rest_framework import serializers, fields
+from rest_framework import serializers
 
-from plogs.main.serializers import UserSerializer
 from . import models
 from .fields import GetOrCreateSlugRelatedField
+
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='plane.owner.username')
@@ -25,9 +25,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         return reverse('api.build:user-projects-detail',
                        args=[obj.plane.owner.username,
                              obj.id,
-                             "json",
-                            ],
-                        request=self.context['request'])
+                             "json"],
+                       request=self.context['request'])
 
     def get_buildlogs_url(self, obj):
         """
@@ -36,30 +35,32 @@ class ProjectSerializer(serializers.ModelSerializer):
         return reverse('api.build:project-buildlogs-list',
                        args=[obj.plane.owner.username,
                              obj.id,
-                             "json",
-                            ],
-                        request=self.context['request'])
+                             "json"],
+                       request=self.context['request'])
+
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Category
         fields = ('id', 'name')
 
+
 class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Partner
         fields = ('id', 'name')
 
+
 class BuildLogSerializer(serializers.ModelSerializer):
     project = ProjectSerializer()
     category = GetOrCreateSlugRelatedField(
-        queryset = models.Category.objects.all(),
-        slug_field = 'name'
+        queryset=models.Category.objects.all(),
+        slug_field='name'
     )
     partner = GetOrCreateSlugRelatedField(
-        queryset = models.Partner.objects.all(),
-        slug_field = 'name',
-        required = False
+        queryset=models.Partner.objects.all(),
+        slug_field='name',
+        required=False
     )
 
     # system-generated
@@ -81,30 +82,43 @@ class BuildLogSerializer(serializers.ModelSerializer):
                        args=[obj.project.plane.owner.username,
                              obj.project.id,
                              obj.log_id,
-                             "json",
-                            ],
-                        request=self.context['request'])
+                             "json"],
+                       request=self.context['request'])
 
     def validate_project(self, value):
+        """
+        Return a project object using the given project data.
+        """
         project_data = self.initial_data['project']
         return models.Project.objects.for_user(self.context['request'].user).get(id=project_data['id'])
 
     def validate_reference(self, value):
+        """
+        Convert the array of reference numbers into a comma-separated string.
+        """
         return ', '.join(self.initial_data["reference"])
 
     def validate_parts(self, value):
+        """
+        Convert the array of part numbers into a comma-separated string.
+        """
         return ', '.join(self.initial_data["parts"])
+
 
 class BuildLogImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BuildLogImage
         fields = ('url', 'caption')
 
+
 class HTMLTextField(serializers.CharField):
     """
     Serializes text that contains HTML for display
     """
     def to_representation(self, value):
+        """
+        Add linebreaks to the text for display as HTML.
+        """
         value = super(HTMLTextField, self).to_representation(value)
         return linebreaksbr(value, autoescape=True)
 
@@ -113,12 +127,11 @@ class BuildLogDetailSerializer(BuildLogSerializer):
     images = BuildLogImageSerializer(many=True, read_only=True)
     notes = HTMLTextField()
 
-    class Meta():
-      model = models.BuildLog
-      fields = ('log_id', 'project', 'category', 'partner', 'date',
-                'duration', 'reference', 'parts', 'summary', 'api_url',
-                'notes', 'images')
+    class Meta(BuildLogSerializer.Meta):
+        fields = ('log_id', 'project', 'category', 'partner', 'date',
+                  'duration', 'reference', 'parts', 'summary', 'api_url',
+                  'notes', 'images')
 
-      # disable automatic validators -- the UniqueTogetherValidation
-      # for log_id was causing log_id to be required on post (we'll set it later)
-      validators = []
+        # disable automatic validators -- the UniqueTogetherValidation
+        # for log_id was causing log_id to be required on post (we'll set it later)
+        validators = []
