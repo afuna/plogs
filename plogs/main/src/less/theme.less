@@ -298,3 +298,12 @@
 .ui-select-no-choices .ui-select-choices {
   display: none;
 }
+
+// form validation
+.ng-submitted.ng-invalid,
+.ng-dirty.ng-invalid,
+.ng-touched.ng-invalid > .ui-select-match .btn,
+.ng-submitted.ng-invalid .ng-invalid > .ui-select-match .btn {
+  border-color: red !important;
+  border-width: 2px;
+}

@@ -1,11 +1,11 @@
-<div class="container" ng-controller="BuildLogFormController as buildlog"><div class="row"><div class="col-md-8 col-md-offset-2"><form novalidate name="form" ng-submit="buildlog.save(buildlog.form)">
+<div class="container" ng-controller="BuildLogFormController as buildlog"><div class="row"><div class="col-md-8 col-md-offset-2"><form novalidate name="form" ng-submit="form.$valid && buildlog.save(buildlog.form)">
 
 
 <div class="row">
     <div class="col-md-3">
     <div class="form-group" ng-class="{'has-error': datepickerForm.date.$invalid}">
         <label for="date" class="control-label">Date</label>
-        <input class="form-control" data-container="body" ng-model="buildlog.form.date" id="date" name="date" bs-datepicker type="text">
+        <input class="form-control" required data-container="body" ng-model="buildlog.form.date" id="date" name="date" bs-datepicker type="text">
     </div>
     </div>
 
@@ -19,7 +19,7 @@
     <div class="col-md-5">
         <div class="form-group">
             <label for="category" class="control-label">Category</label>
-            <combobox ui-select tagging="buildlog.processNewCategory" tagging-tokens="ENTER" tagging-label="('new')" ng-model="buildlog.form.category" theme="bootstrap">
+            <combobox ui-select required tagging="buildlog.processNewCategory" tagging-tokens="ENTER" tagging-label="('new')" ng-model="buildlog.form.category" theme="bootstrap">
               <ui-select-match placeholder="{{$select.selected.name || 'Select category...'}}">{{$select.selected.name}}</ui-select-match>
               <ui-select-choices repeat="category.name as category in buildlog.categories | filter: $select.search">
                 <div ng-bind-html="category.name | highlight: $select.search"></div>
