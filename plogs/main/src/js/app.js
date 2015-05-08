@@ -8,7 +8,8 @@
         'auth',
         'index',
         'buildlogs',
-        'breadcrumbs'
+        'breadcrumbs',
+        'editor'
     ])
     .config(function ($routeProvider, assetsRoot) {
         var buildlogsPath = '/people/:username/projects/:project_id/buildlogs'

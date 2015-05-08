@@ -18,8 +18,15 @@
 <script src="{% static 'assets/vendor/angular-strap/dist/modules/dimensions.js' %}"></script>
 <script src="{% static 'assets/vendor/angular-strap/dist/modules/datepicker.js' %}"></script>
 <script src="{% static 'assets/vendor/angular-strap/dist/modules/datepicker.tpl.js' %}"></script>
+<script src="{% static 'assets/vendor/CodeMirror/lib/codemirror.js' %}"></script>
+<script src="{% static 'assets/vendor/CodeMirror/addon/edit/continuelist.js' %}"></script>
+<script src="{% static 'assets/vendor/CodeMirror/mode/xml/xml.js' %}"></script>
+<script src="{% static 'assets/vendor/CodeMirror/mode/markdown/markdown.js' %}"></script>
+<script src="{% static 'assets/vendor/marked/marked.min.js' %}"></script>
+<script src="{% static 'assets/main/js/editor.module.js' %}"></script>
 {% endblock %}
 
 {% block page_css %}
 <link type="text/css" href="{% static 'assets/vendor/angular-ui-select/dist/select.css' %}" media="all" rel="stylesheet">
+<link type="text/css" href="{% static 'assets/vendor/CodeMirror/lib/codemirror.css' %}" media="all" rel="stylesheet">
 {% endblock %}
