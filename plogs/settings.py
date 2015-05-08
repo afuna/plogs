@@ -114,6 +114,40 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 20
 }
 
+# HTML Sanitizer
+BLEACH_ALLOWED_TAGS = [
+    'a',
+    'abbr',
+    'acronym',
+    'b',
+    'blockquote',
+    'code',
+    'em',
+    'i',
+    'li',
+    'ol',
+    'strong',
+    'ul',
+    'img',
+    'sub',
+    'sup',
+    'div',
+    'span',
+    'br',
+    'p',
+    'hr',
+]
+
+BLEACH_ALLOWED_ATTRIBUTES = {
+    'a': ['href', 'title', 'class'],
+    'abbr': ['title'],
+    'acronym': ['title'],
+    'img': ['src', 'alt', 'title', 'class'],
+    'div': ['class'],
+    'span': ['class'],
+}
+
+
 # Errors
 if os.environ.get('ADMIN_EMAIL'):
     ADMINS = (('Admin', os.environ.get('ADMIN_EMAIL')))

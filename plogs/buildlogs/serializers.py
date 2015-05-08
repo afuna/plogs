@@ -1,6 +1,8 @@
-from django.template.defaultfilters import linebreaksbr
+from django.conf import settings
 from rest_framework.reverse import reverse
 from rest_framework import serializers
+from markdown import markdown
+import bleach
 
 from . import models
 from .fields import GetOrCreateSlugRelatedField
@@ -111,21 +113,25 @@ class BuildLogImageSerializer(serializers.ModelSerializer):
         fields = ('url', 'caption')
 
 
-class HTMLTextField(serializers.CharField):
+class MarkdownField(serializers.CharField):
     """
-    Serializes text that contains HTML for display
+    Serializes text that contains Markdown for display
     """
     def to_representation(self, value):
         """
         Add linebreaks to the text for display as HTML.
         """
-        value = super(HTMLTextField, self).to_representation(value)
-        return linebreaksbr(value, autoescape=True)
+        value = super(MarkdownField, self).to_representation(value)
+        return bleach.clean(
+            markdown(value, output_format='html5'),
+            tags=settings.BLEACH_ALLOWED_TAGS,
+            attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
+        )
 
 
 class BuildLogDetailSerializer(BuildLogSerializer):
     images = BuildLogImageSerializer(many=True, read_only=True)
-    notes = HTMLTextField(required=False)
+    notes = MarkdownField(required=False)
 
     class Meta(BuildLogSerializer.Meta):
         fields = ('log_id', 'project', 'category', 'partner', 'date',
