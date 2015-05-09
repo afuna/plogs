@@ -45,7 +45,8 @@ app.directive('editor', function (editorModuleAssets) {
                 }
             };
 
-            element.find("button").click(function() {
+            element.find("button").click(function(e) {
+                e.preventDefault();
                 insertions[$(this).data("type") || "el"]($(this));
                 codemirror.focus();
             });
