@@ -136,6 +136,8 @@ BLEACH_ALLOWED_TAGS = [
     'br',
     'p',
     'hr',
+    'figure',
+    'figcaption'
 ]
 
 BLEACH_ALLOWED_ATTRIBUTES = {

@@ -6,6 +6,7 @@ import bleach
 
 from . import models
 from .fields import GetOrCreateSlugRelatedField
+from .markdown_extensions import ImageFigureExtension
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -123,7 +124,7 @@ class MarkdownField(serializers.CharField):
         """
         value = super(MarkdownField, self).to_representation(value)
         return bleach.clean(
-            markdown(value, output_format='html5'),
+            markdown(value, output_format='html5', extensions=[ImageFigureExtension()]),
             tags=settings.BLEACH_ALLOWED_TAGS,
             attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
         )
