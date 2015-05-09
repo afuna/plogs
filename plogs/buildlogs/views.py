@@ -144,10 +144,10 @@ def photo_upload_url(request, *args, **kwargs):
         return HttpResponse(json.dumps({}))
 
     mime_type = request.GET['s3_object_type']
-    project_name = request.GET['project_name']
+    project_id = request.GET['project_id']
     buildlog_id = request.GET['log_id']
 
-    project = Project.objects.for_user(request.user, project_name=project_name).first()
+    project = Project.objects.for_user(request.user).get(id=project_id)
     build = None
     if buildlog_id:
         build = BuildLog.objects.get(project=project, log_id=buildlog_id)
