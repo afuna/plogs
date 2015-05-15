@@ -38,7 +38,8 @@ module.exports = function(grunt) {
                     '<%= compiled_assets %>/main/js/auth.module.js': 'plogs/main/src/js/auth/*',
                     '<%= compiled_assets %>/buildlogs/js/index.module.js': 'plogs/buildlogs/src/js/index/*',
                     '<%= compiled_assets %>/buildlogs/js/buildlogs.module.js': 'plogs/buildlogs/src/js/buildlogs/*',
-                    '<%= compiled_assets %>/main/js/breadcrumbs.module.js': 'plogs/main/src/js/breadcrumbs/*'
+                    '<%= compiled_assets %>/main/js/breadcrumbs.module.js': 'plogs/main/src/js/breadcrumbs/*',
+                    '<%= compiled_assets %>/main/js/editor.module.js': 'plogs/main/src/js/editor/*'
                 }
             }
         },
@@ -51,7 +52,9 @@ module.exports = function(grunt) {
                         cwd: 'bower_components',
                         src: ['bootstrap/less/**', 'bootstrap/dist/js/*', 'jquery/dist/*',
                               'bootstrap/dist/fonts/*', 'angular*/angular*.js', 'angular-ui-select/dist/*',
-                              'angular-strap/dist/**'],
+                              'angular-strap/dist/**', 'marked/marked.min.js',
+                              'CodeMirror/lib/*', 'CodeMirror/addon/edit/continuelist.js',
+                              'CodeMirror/mode/xml/xml.js', 'CodeMirror/mode/markdown/markdown.js'],
                         dest: '<%= vendor_assets %>'
                     }
                 ]
@@ -59,7 +62,8 @@ module.exports = function(grunt) {
             vendorjs: {
                 expand: true,
                 cwd: '<%= vendor_assets %>',
-                src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular*/angular*.js', 'angular-ui-select/dist/*', 'angular-strap/dist/**'],
+                src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular*/angular*.js', 'angular-ui-select/dist/*',
+                      'angular-strap/dist/**', 'CodeMirror/**', 'marked/*'],
                 dest: '<%= compiled_assets %>/vendor'
             },
             appjs: {

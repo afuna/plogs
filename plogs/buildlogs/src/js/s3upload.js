@@ -2,20 +2,24 @@
 
   window.S3Upload = (function() {
 
-    S3Upload.prototype.project_name = '';
+    S3Upload.prototype.project_id = '';
 
     S3Upload.prototype.log_id = '';
 
     S3Upload.prototype.s3_sign_put_url = '/signS3put';
 
-    S3Upload.prototype.file_dom_selector = 'file_upload';
+    S3Upload.prototype.files = [];
+
+    S3Upload.prototype.onStart = function(filename) {
+      return console.log('base.onStart()', filename)
+    };
 
     S3Upload.prototype.onFinishS3Put = function(public_url) {
       return console.log('base.onFinishS3Put()', public_url);
     };
 
-    S3Upload.prototype.onProgress = function(percent, status) {
-      return console.log('base.onProgress()', percent, status);
+    S3Upload.prototype.onProgress = function(percent, status, filename) {
+      return console.log('base.onProgress()', percent, status, filename);
     };
 
     S3Upload.prototype.onError = function(status) {
@@ -27,21 +31,22 @@
       for (option in options) {
         this[option] = options[option];
       }
-      this.handleFileSelect(document.getElementById(this.file_dom_selector));
+      this.handleFileSelect(this.files);
     }
 
-    S3Upload.prototype.handleFileSelect = function(file_element) {
-      var f, files, output, _i, _len, _results;
-      this.onProgress(0, 'Upload started.');
-      files = file_element.files;
+    S3Upload.prototype.handleFileSelect = function(files) {
+      var f, output, _i, _len, _results;
       output = [];
       _results = [];
       for (_i = 0, _len = files.length; _i < _len; _i++) {
         f = files[_i];
+        this.onProgress(0, 'Upload started.', f.name);
+        this.onStart(f.name);
         _results.push(this.uploadFile(f));
       }
       return _results;
     };
+
 
     S3Upload.prototype.createCORSRequest = function(method, url) {
       var xhr;
@@ -61,7 +66,7 @@
       var this_s3upload, xhr;
       this_s3upload = this;
       xhr = new XMLHttpRequest();
-      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_name=' + this.project_name + '&log_id=' + this.log_id, true);
+      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_id=' + this.project_id + '&log_id=' + this.log_id, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
       xhr.onreadystatechange = function(e) {
         var result;
@@ -89,8 +94,8 @@
       } else {
         xhr.onload = function() {
           if (xhr.status === 200) {
-            this_s3upload.onProgress(100, 'Upload completed.');
-            return this_s3upload.onFinishS3Put(public_url);
+            this_s3upload.onProgress(100, 'Upload completed.', file.name);
+            return this_s3upload.onFinishS3Put(public_url, file.name);
           } else {
             return this_s3upload.onError('Upload error: ' + xhr.status);
           }
@@ -102,7 +107,7 @@
           var percentLoaded;
           if (e.lengthComputable) {
             percentLoaded = Math.round((e.loaded / e.total) * 100);
-            return this_s3upload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.');
+            return this_s3upload.onProgress(percentLoaded, percentLoaded === 100 ? 'Finalizing.' : 'Uploading.', file.name);
           }
         };
       }

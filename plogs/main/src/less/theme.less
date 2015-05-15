@@ -6,6 +6,7 @@
 @import "custom-variables.less";
 @import "@{bootstrap_base_dir}/mixins.less";
 @import "pages/frontpage.less";
+@import "pages/buildlog.less";
 
 
 //
@@ -306,4 +307,8 @@
 .ng-submitted.ng-invalid .ng-invalid > .ui-select-match .btn {
   border-color: red !important;
   border-width: 2px;
+}
+
+.CodeMirror.form-control {
+  transition: none;
 }

@@ -1,0 +1,17 @@
+figure {
+    &:extend(.thumbnail);
+    max-width: 80%;
+    margin: 0 auto;
+    clear: right;
+
+    img {
+        &:extend(.img-responsive);
+    }
+
+    figcaption {
+        &:extend(.caption);
+        font-style: italic;
+        text-align: center;
+    }
+}
+

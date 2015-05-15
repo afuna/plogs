@@ -130,3 +130,38 @@ LOGGING = {
         },
     },
 }
+
+# HTML Sanitizer
+BLEACH_ALLOWED_TAGS = [
+    'a',
+    'abbr',
+    'acronym',
+    'b',
+    'blockquote',
+    'code',
+    'em',
+    'i',
+    'li',
+    'ol',
+    'strong',
+    'ul',
+    'img',
+    'sub',
+    'sup',
+    'div',
+    'span',
+    'br',
+    'p',
+    'hr',
+    'figure',
+    'figcaption'
+]
+
+BLEACH_ALLOWED_ATTRIBUTES = {
+    'a': ['href', 'title', 'class'],
+    'abbr': ['title'],
+    'acronym': ['title'],
+    'img': ['src', 'alt', 'title', 'class'],
+    'div': ['class'],
+    'span': ['class'],
+}

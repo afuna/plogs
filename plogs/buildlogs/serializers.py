@@ -1,9 +1,12 @@
-from django.template.defaultfilters import linebreaksbr
+from django.conf import settings
 from rest_framework.reverse import reverse
 from rest_framework import serializers
+from markdown import markdown
+import bleach
 
 from . import models
 from .fields import GetOrCreateSlugRelatedField
+from .markdown_extensions import ImageFigureExtension
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -111,21 +114,25 @@ class BuildLogImageSerializer(serializers.ModelSerializer):
         fields = ('url', 'caption')
 
 
-class HTMLTextField(serializers.CharField):
+class MarkdownField(serializers.CharField):
     """
-    Serializes text that contains HTML for display
+    Serializes text that contains Markdown for display
     """
     def to_representation(self, value):
         """
         Add linebreaks to the text for display as HTML.
         """
-        value = super(HTMLTextField, self).to_representation(value)
-        return linebreaksbr(value, autoescape=True)
+        value = super(MarkdownField, self).to_representation(value)
+        return bleach.clean(
+            markdown(value, output_format='html5', extensions=[ImageFigureExtension()]),
+            tags=settings.BLEACH_ALLOWED_TAGS,
+            attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
+        )
 
 
 class BuildLogDetailSerializer(BuildLogSerializer):
     images = BuildLogImageSerializer(many=True, read_only=True)
-    notes = HTMLTextField(required=False)
+    notes = MarkdownField(required=False)
 
     class Meta(BuildLogSerializer.Meta):
         fields = ('log_id', 'project', 'category', 'partner', 'date',
@@ -135,3 +142,13 @@ class BuildLogDetailSerializer(BuildLogSerializer):
         # disable automatic validators -- the UniqueTogetherValidation
         # for log_id was causing log_id to be required on post (we'll set it later)
         validators = []
+
+    def create(self, validated_data):
+        buildlog = models.BuildLog.objects.create(**validated_data)
+
+        images = models.BuildLogImage.objects.from_build_new(buildlog.project)
+        for image in images:
+            image.build = buildlog
+            image.save()
+
+        return buildlog
