@@ -14,5 +14,8 @@ app.controller('IndexController', function (ProjectFactory, AuthenticationFactor
     ProjectFactory.getActiveProject()
         .then(angular.bind(this, function then(data) {
             this.project = data;
+            this.build_new_url = "#/people/" + this.project.project.user +
+                                 "/projects/" + this.project.project.id +
+                                 "/buildlogs/new";
         }));
 });

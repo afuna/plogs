@@ -27,13 +27,6 @@ class ActiveProjectViewSet(viewsets.ViewSet):
             "project": serializers.ProjectSerializer(project, context={"request": request}).data,
 
             "stats": stats,
-
-            "build_new_url": reverse('build:new', kwargs={
-                "project_name": project.plane.kit.model,
-                "username": request.user.username
-                }, request=request),
-
-            "expense_new_url": "",
         }
 
         return Response(data)
