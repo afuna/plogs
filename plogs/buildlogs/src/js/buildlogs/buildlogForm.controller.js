@@ -1,7 +1,7 @@
 var app = angular.module('buildlogForm.controller', [
     'combobox.directive'
 ]);
-app.controller('BuildLogFormController', function BuildLogFormController($routeParams, $filter, Category, Partner, BuildLog) {
+app.controller('BuildLogFormController', function BuildLogFormController($routeParams, $location, $filter, Category, Partner, BuildLog) {
     this.form = {
         date: (new Date())
     };
@@ -51,6 +51,14 @@ app.controller('BuildLogFormController', function BuildLogFormController($routeP
         buildlog.date = $filter('date')(buildlog.date, "yyyy-MM-dd");
 
         var newBuildLog = new BuildLog(buildlog);
-        newBuildLog.$save();
+        newBuildLog.$save()
+        .then(function(response) {
+            $location.url('/people/' + response.project.user +
+                          '/projects/' + response.project.id +
+                          '/buildlogs/' + response.log_id);
+        })
+        .catch(function() {
+            console.log("error saving buildlog");
+        })
     };
 });
