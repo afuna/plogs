@@ -142,3 +142,13 @@ class BuildLogDetailSerializer(BuildLogSerializer):
         # disable automatic validators -- the UniqueTogetherValidation
         # for log_id was causing log_id to be required on post (we'll set it later)
         validators = []
+
+    def create(self, validated_data):
+        buildlog = models.BuildLog.objects.create(**validated_data)
+
+        images = models.BuildLogImage.objects.from_build_new(buildlog.project)
+        for image in images:
+            image.build = buildlog
+            image.save()
+
+        return buildlog
