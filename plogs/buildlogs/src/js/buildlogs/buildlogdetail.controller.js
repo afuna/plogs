@@ -1,5 +1,5 @@
 var app = angular.module('buildlogDetail.controller', []);
-app.controller('BuildLogDetailController', function BuildLogDetailController($routeParams, $location, BuildLog) {
+app.controller('BuildLogDetailController', function BuildLogDetailController($routeParams, $location, BuildLog, AuthenticationFactory) {
 
     this.buildlog = {};
 
@@ -10,6 +10,13 @@ app.controller('BuildLogDetailController', function BuildLogDetailController($ro
     }).$promise
         .then(angular.bind(this, function then(data) {
             this.buildlog = data;
-        }));
 
+            AuthenticationFactory.isAuthenticated()
+                .then(angular.bind(this, function then(data) {
+                    if (data.authenticated) {
+                        this.buildlog.edit_url = "#" + $location.path()+"/edit";
+                    }
+                })
+            );
+        }));
 });

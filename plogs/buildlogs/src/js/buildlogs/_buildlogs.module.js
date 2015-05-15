@@ -9,6 +9,7 @@ var app = angular.module('buildlogs', [
     'buildlogMetadata.directive',
     'buildlogText.directive',
     'buildlogImages.directive',
+    'stringToNumber.directive',
     'plogsUtils'
 ])
 .factory('buildlogsModuleAssets', function (assets) {

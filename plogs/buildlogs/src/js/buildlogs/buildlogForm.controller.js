@@ -6,6 +6,16 @@ app.controller('BuildLogFormController', function BuildLogFormController($routeP
         date: (new Date())
     };
 
+    if ( $routeParams.log_id ) {
+        BuildLog.get({
+            username: $routeParams.username,
+            project_id: $routeParams.project_id,
+            log_id: $routeParams.log_id
+        }).$promise
+            .then(angular.bind(this, function then(data) {
+                this.form = data;
+            }));
+    }
     this.categories = [];
     Category.query({
         username: $routeParams.username
