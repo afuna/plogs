@@ -2,7 +2,7 @@ from rest_framework.reverse import reverse
 from rest_framework import serializers
 
 from . import models
-from .fields import GetOrCreateSlugRelatedField, MarkdownField
+from .fields import GetOrCreateSlugRelatedField, MarkdownField, FakeArrayField
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -61,6 +61,9 @@ class BuildLogSerializer(serializers.ModelSerializer):
         slug_field='name',
         required=False
     )
+
+    parts = FakeArrayField()
+    reference = FakeArrayField()
 
     # system-generated
     log_id = serializers.IntegerField(required=False, read_only=True)

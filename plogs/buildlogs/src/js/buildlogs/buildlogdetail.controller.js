@@ -9,6 +9,14 @@ app.controller('BuildLogDetailController', function BuildLogDetailController($ro
         log_id: $routeParams.log_id
     }).$promise
         .then(angular.bind(this, function then(data) {
+            if (data.parts) {
+                data.parts = data.parts.join(", ");
+            }
+
+            if (data.reference) {
+                data.reference = data.reference.join(", ");
+            }
+
             this.buildlog = data;
 
             AuthenticationFactory.isAuthenticated()

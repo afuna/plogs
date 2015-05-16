@@ -37,3 +37,11 @@ class MarkdownField(serializers.CharField):
             tags=settings.BLEACH_ALLOWED_TAGS,
             attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
         )
+
+
+class FakeArrayField(serializers.CharField):
+    """
+    Returns an array for the serialized format, but stores as a comma-separated string.
+    """
+    def to_representation(self, value):
+        return [str(s).strip() for s in value.split(',')]
