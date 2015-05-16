@@ -1,12 +1,8 @@
-from django.conf import settings
 from rest_framework.reverse import reverse
 from rest_framework import serializers
-from markdown import markdown
-import bleach
 
 from . import models
-from .fields import GetOrCreateSlugRelatedField
-from .markdown_extensions import ImageFigureExtension
+from .fields import GetOrCreateSlugRelatedField, MarkdownField
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -114,22 +110,6 @@ class BuildLogImageSerializer(serializers.ModelSerializer):
         fields = ('url', 'caption')
 
 
-class MarkdownField(serializers.CharField):
-    """
-    Serializes text that contains Markdown for display
-    """
-    def to_representation(self, value):
-        """
-        Add linebreaks to the text for display as HTML.
-        """
-        value = super(MarkdownField, self).to_representation(value)
-        return bleach.clean(
-            markdown(value, output_format='html5', extensions=[ImageFigureExtension()]),
-            tags=settings.BLEACH_ALLOWED_TAGS,
-            attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
-        )
-
-
 class BuildLogDetailSerializer(BuildLogSerializer):
     images = BuildLogImageSerializer(many=True, read_only=True)
     notes = MarkdownField(required=False)
@@ -144,6 +124,10 @@ class BuildLogDetailSerializer(BuildLogSerializer):
         validators = []
 
     def create(self, validated_data):
+        """
+        Override the default create to save images on the buildlog.
+        """
+
         buildlog = models.BuildLog.objects.create(**validated_data)
 
         images = models.BuildLogImage.objects.from_build_new(buildlog.project)
