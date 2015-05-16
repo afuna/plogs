@@ -34,8 +34,8 @@
             })
             .when(buildlogsPath + '/:log_id/edit', {
                 templateUrl: assetsRoot + '/buildlogs/views/buildlogs-form.html',
-                controller: 'BuildLogDetailController',
-                controllerAs: 'page'
+                controller: 'BuildLogFormController',
+                controllerAs: 'buildlog'
             })
             .otherwise({
                 redirectTo: "/"
