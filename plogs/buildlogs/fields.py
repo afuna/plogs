@@ -39,4 +39,7 @@ class FakeArrayField(serializers.CharField):
     Returns an array for the serialized format, but stores as a comma-separated string.
     """
     def to_representation(self, value):
-        return [str(s).strip() for s in value.split(',')]
+        if len(value):
+            return [str(s).strip() for s in value.split(',')]
+        else:
+            return []
