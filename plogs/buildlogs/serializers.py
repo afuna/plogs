@@ -63,7 +63,8 @@ class BuildLogSerializer(serializers.ModelSerializer):
     partner = GetOrCreateSlugRelatedField(
         queryset=models.Partner.objects.all(),
         slug_field='name',
-        required=False
+        required=False,
+        allow_null=True,
     )
 
     parts = FakeArrayField()
