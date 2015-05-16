@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from . import models
 from .fields import GetOrCreateSlugRelatedField, MarkdownField, FakeArrayField
+from .utils import sanitize
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -51,6 +52,9 @@ class PartnerSerializer(serializers.ModelSerializer):
 
 
 class BuildLogSerializer(serializers.ModelSerializer):
+    """
+    Viewing buildlogs in a list.
+    """
     project = ProjectSerializer()
     category = GetOrCreateSlugRelatedField(
         queryset=models.Category.objects.all(),
@@ -114,13 +118,18 @@ class BuildLogImageSerializer(serializers.ModelSerializer):
 
 
 class BuildLogDetailSerializer(BuildLogSerializer):
+    """
+    Viewing/editing individual buildlogs.
+    """
+
     images = BuildLogImageSerializer(many=True, read_only=True)
     notes = MarkdownField(required=False)
+    notes_edit = serializers.SerializerMethodField()
 
     class Meta(BuildLogSerializer.Meta):
         fields = ('log_id', 'project', 'category', 'partner', 'date',
                   'duration', 'reference', 'parts', 'summary', 'api_url',
-                  'notes', 'images')
+                  'notes', 'notes_edit', 'images')
 
         # disable automatic validators -- the UniqueTogetherValidation
         # for log_id was causing log_id to be required on post (we'll set it later)
@@ -139,3 +148,9 @@ class BuildLogDetailSerializer(BuildLogSerializer):
             image.save()
 
         return buildlog
+
+    def get_notes_edit(self, obj):
+        """
+        Return notes in a raw (but sanitized) form suitable for editing.
+        """
+        return sanitize(obj.notes)

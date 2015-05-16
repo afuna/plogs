@@ -1,9 +1,8 @@
-from django.conf import settings
 from rest_framework import serializers
-import bleach
 from markdown import markdown
 
 from .markdown_extensions import ImageFigureExtension
+from .utils import sanitize
 
 
 class GetOrCreateSlugRelatedField(serializers.SlugRelatedField):
@@ -23,20 +22,16 @@ class GetOrCreateSlugRelatedField(serializers.SlugRelatedField):
 
 
 class MarkdownField(serializers.CharField):
-
     """
     Serializes text that contains Markdown for display
     """
     def to_representation(self, value):
         """
-        Add linebreaks to the text for display as HTML.
+        Convert markdown to sanitized HTML.
         """
         value = super(MarkdownField, self).to_representation(value)
-        return bleach.clean(
-            markdown(value, output_format='html5', extensions=[ImageFigureExtension()]),
-            tags=settings.BLEACH_ALLOWED_TAGS,
-            attributes=settings.BLEACH_ALLOWED_ATTRIBUTES
-        )
+        value = markdown(value, output_format='html5', extensions=[ImageFigureExtension()])
+        return sanitize(value)
 
 
 class FakeArrayField(serializers.CharField):

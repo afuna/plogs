@@ -1,7 +1,7 @@
 var app = angular.module('buildlogForm.controller', [
     'combobox.directive'
 ]);
-app.controller('BuildLogFormController', function BuildLogFormController($routeParams, $location, $filter, Category, Partner, BuildLog) {
+app.controller('BuildLogFormController', function BuildLogFormController($scope, $routeParams, $location, $filter, Category, Partner, BuildLog) {
     this.form = {
         date: (new Date())
     };
@@ -14,6 +14,7 @@ app.controller('BuildLogFormController', function BuildLogFormController($routeP
         }).$promise
             .then(angular.bind(this, function then(data) {
                 this.form = data;
+                $scope.$broadcast('editor.init', data.notes_edit);
             }));
     }
     this.categories = [];

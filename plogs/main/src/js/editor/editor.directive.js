@@ -3,11 +3,10 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
     return {
         restrict: 'E',
         require: 'ngModel',
-        scope: {},
         templateUrl: editorModuleAssets('partials/editor.tmpl.html'),
         controllerAs: 'editor',
         link: function(scope, element, attrs, controller) {
-            var textarea = element.find('textarea').get(0)
+            var textarea = element.find('textarea').get(0);
             var codemirror = CodeMirror.fromTextArea(textarea, {
                 mode: 'markdown',
                 lineWrapping: true,
@@ -26,6 +25,10 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
                 controller.$setViewValue(codemirror.getValue());
             });
 
+            // set the editor's initial value (if someone does a $broadcast)
+            scope.$on('editor.init', function(e, value) {
+                codemirror.setValue(value);
+            });
 
             // based on markdownify
             var insertions = {
