@@ -13,7 +13,7 @@ app.factory('BuildLog', function BuildLog($resource, $http) {
         {
             // api returns extra data as an object (count, etc)
             query: { method: 'GET', isArray: false },
-            save:  { method: 'PUT' }
+            update:  { method: 'PUT' }
         }
     );
 });

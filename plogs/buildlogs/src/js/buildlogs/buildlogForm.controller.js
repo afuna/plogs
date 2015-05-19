@@ -61,9 +61,17 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
         buildlog.project = {"user": $routeParams.username, "id": $routeParams.project_id};
         buildlog.date = $filter('date')(buildlog.date, "yyyy-MM-dd");
 
-        var newBuildLog = new BuildLog(buildlog);
-        newBuildLog.$save()
-        .then(function(response) {
+        var buildLogAPI = new BuildLog(buildlog);
+        var promise;
+        if (buildlog.log_id) {
+            // edit
+            promise = buildLogAPI.$update();
+        } else {
+            // create new
+            promise = buildLogAPI.$save();
+        }
+
+        promise.then(function(response) {
             $location.url('/people/' + response.project.user +
                           '/projects/' + response.project.id +
                           '/buildlogs/' + response.log_id);
