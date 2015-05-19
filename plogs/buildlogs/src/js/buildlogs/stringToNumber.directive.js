@@ -7,7 +7,8 @@ app.directive('stringToNumber', function() {
         return '' + value;
       });
       ngModel.$formatters.push(function(value) {
-        return parseFloat(value, 10);
+        var parsed = parseFloat(value, 10);
+        return isNaN(parsed) ? undefined : parsed;
       });
     }
   };
