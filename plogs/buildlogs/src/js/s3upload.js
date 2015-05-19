@@ -63,10 +63,11 @@
     };
 
     S3Upload.prototype.executeOnSignedUrl = function(file, callback) {
-      var this_s3upload, xhr;
+      var this_s3upload, xhr, log_id;
       this_s3upload = this;
       xhr = new XMLHttpRequest();
-      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_id=' + this.project_id + '&log_id=' + this.log_id, true);
+      log_id = this.log_id || "";
+      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_id=' + this.project_id + '&log_id=' + log_id, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
       xhr.onreadystatechange = function(e) {
         var result;

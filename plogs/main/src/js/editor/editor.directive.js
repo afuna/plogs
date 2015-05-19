@@ -65,7 +65,7 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
                     files: e.target.files || e.originalEvent.dataTransfer.files,
                     s3_sign_put_url: '/people/' + $routeParams.username + '/build/photo_upload_url/',
                     project_id: $routeParams.project_id,
-                    log_id: "",
+                    log_id: $routeParams.log_id,
                     onProgress: function(percent, message, filename) {
                     },
                     onStart: function(filename) {
