@@ -67,8 +67,8 @@ class BuildLogSerializer(serializers.ModelSerializer):
         allow_null=True,
     )
 
-    parts = FakeArrayField()
-    reference = FakeArrayField()
+    parts = FakeArrayField(required=False)
+    reference = FakeArrayField(required=False)
 
     # system-generated
     log_id = serializers.IntegerField(required=False, read_only=True)
