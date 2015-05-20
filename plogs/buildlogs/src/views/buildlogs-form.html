@@ -76,5 +76,14 @@
     <editor ng-model="buildlog.form.notes"></editor>
 </div>
 
+<div class="row">
+    <div ng-repeat="image in buildlog.form.images track by image.url" class="col-sm-4">
+        <figure class="tiny-figure">
+            <img ng-src="{{ :: image.url}}" alt="{{ :: image.alt }}">
+            <figcaption ng-show="image.caption" class="caption">{{ :: image.caption}}</figcaption>
+        </figure>
+    </div>
+</div>
+
 <input type="submit" class="btn btn-primary" value="Log">
 </form></div></div></div>

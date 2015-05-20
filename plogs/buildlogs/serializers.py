@@ -1,9 +1,11 @@
 from rest_framework.reverse import reverse
 from rest_framework import serializers
+from markdown import markdown
 
 from . import models
 from .fields import GetOrCreateSlugRelatedField, MarkdownField, FakeArrayField
 from .utils import sanitize
+from .markdown_extensions import ImageProcessingExtension
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -115,7 +117,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
 class BuildLogImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.BuildLogImage
-        fields = ('url', 'caption')
+        fields = ('id', 'url', 'caption', 'alt')
 
 
 class BuildLogDetailSerializer(BuildLogSerializer):
@@ -136,9 +138,17 @@ class BuildLogDetailSerializer(BuildLogSerializer):
         # for log_id was causing log_id to be required on post (we'll set it later)
         validators = []
 
+    def _update_image_captions(self, buildlog):
+        """
+        Update BuildLogImages with captions taken from the markdown.
+        """
+        markdown(buildlog.notes,
+                 extensions=[ImageProcessingExtension(callback=buildlog.save_image_info())])
+
+
     def create(self, validated_data):
         """
-        Override the default create to save images on the buildlog.
+        Override the default create to add extra relationships.
         """
 
         buildlog = models.BuildLog.objects.create(**validated_data)
@@ -148,7 +158,17 @@ class BuildLogDetailSerializer(BuildLogSerializer):
             image.build = buildlog
             image.save()
 
+        self._update_image_captions(buildlog)
         return buildlog
+
+    def update(self, instance, validated_data):
+        """
+        Override the default update to add extra relationships.
+        """
+        buildlog = super(BuildLogDetailSerializer, self).update(instance, validated_data)
+        self._update_image_captions(buildlog)
+        return buildlog
+
 
     def get_notes_edit(self, obj):
         """

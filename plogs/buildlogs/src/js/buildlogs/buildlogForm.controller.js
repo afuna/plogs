@@ -76,8 +76,8 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
                           '/projects/' + response.project.id +
                           '/buildlogs/' + response.log_id);
         })
-        .catch(function() {
-            console.log("error saving buildlog");
+        .catch(function(response) {
+            console.log("error saving buildlog", response);
         })
     };
 });
