@@ -174,6 +174,9 @@ class BuildLogImage(models.Model):
 
     objects = BuildLogImageManager()
 
+    class Meta:
+        ordering = ('id',)
+
     def __unicode__(self):
         return "%s (%s)" % (self.caption, self.url)
 
