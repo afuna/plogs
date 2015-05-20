@@ -80,6 +80,9 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
 
                         codemirror.replaceRange('![' + filename + '](' +  url +' "caption")\n',
                                                 pos_start, pos_end);
+
+                        var onUpload = scope.$eval(attrs.onUpload);
+                        scope.$apply(onUpload({url: url, alt: filename}));
                     }
                 });
             }

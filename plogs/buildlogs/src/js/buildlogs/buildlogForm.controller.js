@@ -80,4 +80,11 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
             console.log("error saving buildlog", response);
         })
     };
+
+    this.addImage = function(imageList) {
+        return function(imageData) {
+            imageData.id = 0;
+            imageList.push(imageData);
+        }
+    };
 });
