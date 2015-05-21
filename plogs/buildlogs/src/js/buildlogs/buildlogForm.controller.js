@@ -1,7 +1,8 @@
 var app = angular.module('buildlogForm.controller', [
     'combobox.directive'
 ]);
-app.controller('BuildLogFormController', function BuildLogFormController($scope, $routeParams, $location, $filter, Category, Partner, BuildLog) {
+app.controller('BuildLogFormController', function BuildLogFormController($scope, $routeParams, $location, $filter,
+        Category, Partner, BuildLog, BuildLogImage) {
     this.form = {
         date: (new Date())
     };
@@ -85,6 +86,21 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
         return function(imageData) {
             imageData.id = 0;
             imageList.push(imageData);
+        }
+    };
+
+    this.deleteImage = function(event, image) {
+        event.preventDefault();
+        var index = this.form.images.indexOf(image);
+        if (index != -1) {
+            BuildLogImage.remove({
+                username: $routeParams.username,
+                project_id: $routeParams.project_id,
+                log_id: $routeParams.log_id,
+                image_id: image.id
+            }, angular.bind(this, function() {
+                this.form.images.splice(index, 1);
+            }));
         }
     };
 });

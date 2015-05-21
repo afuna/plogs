@@ -80,7 +80,8 @@
     <div ng-repeat="image in buildlog.form.images track by image.url" class="col-sm-4">
         <figure>
             <img ng-src="{{ :: image.url}}" alt="{{ :: image.alt }}">
-            <figcaption ng-show="image.caption" class="caption">{{ :: image.caption}}</figcaption>
+            <figcaption ng-show="image.caption" class="caption" id="image-{{ :: $index}}">{{ :: image.caption}}</figcaption>
+            <button class="glyphicon glyphicon-remove-circle" ng-click="buildlog.deleteImage($event, image)" aria-label="Delete" aria-describedby="image-{{ :: $index}}"></button>
         </figure>
     </div>
 </div>

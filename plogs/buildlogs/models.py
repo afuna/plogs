@@ -180,6 +180,9 @@ class BuildLogImage(models.Model):
     def __unicode__(self):
         return "%s (%s)" % (self.caption, self.url)
 
+    def owner(self):
+        return self.project.owner()
+
     def save(self, *args, **kwargs):
         """Custom save logic. We want to have a per-project image id (instead of per-table)"""
         if self.image_id is None:
