@@ -15,14 +15,17 @@ figure {
     }
 }
 
-.tiny-figure {
-    max-width: initial;
+.buildlog-images {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
 
-    figcaption {
-        font-size: smaller;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
+    figure {
+        max-width: initial;
+        margin-bottom: 20px;
+
+        figcaption {
+            font-size: smaller;
+        }
     }
 }
-

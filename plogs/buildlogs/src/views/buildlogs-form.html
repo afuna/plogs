@@ -76,9 +76,9 @@
     <editor ng-model="buildlog.form.notes" on-upload="buildlog.addImage(buildlog.form.images)"></editor>
 </div>
 
-<div class="row">
+<div class="row buildlog-images">
     <div ng-repeat="image in buildlog.form.images track by image.url" class="col-sm-4">
-        <figure class="tiny-figure">
+        <figure>
             <img ng-src="{{ :: image.url}}" alt="{{ :: image.alt }}">
             <figcaption ng-show="image.caption" class="caption">{{ :: image.caption}}</figcaption>
         </figure>
