@@ -77,9 +77,9 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
                           '/projects/' + response.project.slug +
                           '/buildlogs/' + response.log_id);
         })
-        .catch(function(response) {
-            console.log("error saving buildlog", response);
-        })
+        .catch(angular.bind(this, function(response) {
+            this.errors = response.data;
+        }))
     };
 
     this.addImage = function(imageList) {
