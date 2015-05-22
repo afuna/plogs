@@ -19,7 +19,7 @@
     <div class="col-md-5">
         <div class="form-group">
             <label for="category" class="control-label">Category</label>
-            <combobox ui-select required tagging="buildlog.processNewCategory" tagging-tokens="ENTER" tagging-label="('new')" ng-model="buildlog.form.category" theme="bootstrap">
+            <combobox ui-select required tagging="buildlog.processNewCategory" tagging-tokens="ENTER|TAB" tagging-label="('new')" ng-model="buildlog.form.category" theme="bootstrap">
               <ui-select-match placeholder="{{$select.selected.name || 'Select category...'}}">{{$select.selected.name}}</ui-select-match>
               <ui-select-choices repeat="category.name as category in buildlog.categories | filter: $select.search">
                 <div ng-bind-html="category.name | highlight: $select.search"></div>
@@ -57,7 +57,7 @@
     <div class="col-md-5">
         <div class="form-group">
             <label for="partner" class="control-label">Partner</label>
-            <combobox ui-select tagging="buildlog.processNewPartner" tagging-tokens="ENTER" tagging-label="('new')" ng-model="buildlog.form.partner" theme="bootstrap">
+            <combobox ui-select tagging="buildlog.processNewPartner" tagging-tokens="ENTER|TAB" tagging-label="('new')" ng-model="buildlog.form.partner" theme="bootstrap">
               <ui-select-match placeholder="{{$select.selected.name || 'Select partner...'}}">{{$select.selected.name}}</ui-select-match>
               <ui-select-choices repeat="partner.name as partner in buildlog.partners | filter: $select.search">
                 <div ng-bind-html="partner.name | highlight: $select.search"></div>
