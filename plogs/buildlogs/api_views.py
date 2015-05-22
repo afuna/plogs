@@ -10,6 +10,7 @@ from . import models, serializers, api_permissions
 class ProjectViewSet(NestedViewSetMixin, viewsets.ModelViewSet):
     queryset = models.Project.objects.all()
     serializer_class = serializers.ProjectSerializer
+    lookup_field = 'slug'
 
 
 class ActiveProjectViewSet(viewsets.ViewSet):

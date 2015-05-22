@@ -8,7 +8,7 @@ app.controller('BuildLogsController', function BuildLogsController($routeParams,
     var loadBuildLogs = angular.bind(this, function loadBuildLogs(page_number) {
         BuildLog.query({
             username: $routeParams.username,
-            project_id: $routeParams.project_id,
+            project: $routeParams.project,
             page: page_number
         }).$promise
             .then(angular.bind(this, function then(data) {
@@ -17,7 +17,7 @@ app.controller('BuildLogsController', function BuildLogsController($routeParams,
                 this.hasMore = this.buildlogs.length < this.numBuildlogs;
             }));
 
-        ProjectFactory.getProject($routeParams.username, $routeParams.project_id)
+        ProjectFactory.getProject($routeParams.username, $routeParams.project)
             .then(angular.bind(this, function then(data) {
                 this.project = data;
             }));

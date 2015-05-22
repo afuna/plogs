@@ -5,7 +5,7 @@ app.controller('BuildLogDetailController', function BuildLogDetailController($ro
 
     BuildLog.get({
         username: $routeParams.username,
-        project_id: $routeParams.project_id,
+        project: $routeParams.project,
         log_id: $routeParams.log_id
     }).$promise
         .then(angular.bind(this, function then(data) {

@@ -9,8 +9,7 @@ from .markdown_extensions import ImageProcessingExtension
 
 
 class ProjectSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='plane.owner.username')
-    name = serializers.ReadOnlyField(source='plane.kit.model')
+    user = serializers.SlugRelatedField(read_only=True, slug_field='username')
 
     # resource urls
     api_url = serializers.SerializerMethodField()
@@ -18,15 +17,16 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Project
-        fields = ('id', 'name', 'date_started', 'user', 'api_url', 'buildlogs_url')
+        fields = ('id', 'slug', 'date_started', 'user', 'api_url', 'buildlogs_url')
+        validators = []
 
     def get_api_url(self, obj):
         """
         Return the URL for the detail view of this project.
         """
         return reverse('api.build:user-projects-detail',
-                       args=[obj.plane.owner.username,
-                             obj.id,
+                       args=[obj.user.username,
+                             obj.slug,
                              "json"],
                        request=self.context['request'])
 
@@ -35,8 +35,8 @@ class ProjectSerializer(serializers.ModelSerializer):
         Return the URL for the list view of buildlogs related to this project.
         """
         return reverse('api.build:project-buildlogs-list',
-                       args=[obj.plane.owner.username,
-                             obj.id,
+                       args=[obj.user.username,
+                             obj.slug,
                              "json"],
                        request=self.context['request'])
 
@@ -89,7 +89,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
         """
         return reverse('api.build:project-buildlogs-detail',
                        args=[obj.project.plane.owner.username,
-                             obj.project.id,
+                             obj.project.slug,
                              obj.log_id,
                              "json"],
                        request=self.context['request'])
@@ -99,7 +99,7 @@ class BuildLogSerializer(serializers.ModelSerializer):
         Return a project object using the given project data.
         """
         project_data = self.initial_data['project']
-        return models.Project.objects.for_user(self.context['request'].user).get(id=project_data['id'])
+        return models.Project.objects.for_user(self.context['request'].user).get(slug=project_data['slug'])
 
     def validate_reference(self, value):
         """

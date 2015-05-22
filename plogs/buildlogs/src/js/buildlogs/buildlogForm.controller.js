@@ -10,7 +10,7 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
     if ( $routeParams.log_id ) {
         BuildLog.get({
             username: $routeParams.username,
-            project_id: $routeParams.project_id,
+            project: $routeParams.project,
             log_id: $routeParams.log_id
         }).$promise
             .then(angular.bind(this, function then(data) {
@@ -59,7 +59,7 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
     });
 
     this.save = function(buildlog) {
-        buildlog.project = {"user": $routeParams.username, "id": $routeParams.project_id};
+        buildlog.project = {"user": $routeParams.username, "slug": $routeParams.project};
         buildlog.date = $filter('date')(buildlog.date, "yyyy-MM-dd");
 
         var buildLogAPI = new BuildLog(buildlog);
@@ -74,7 +74,7 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
 
         promise.then(function(response) {
             $location.url('/people/' + response.project.user +
-                          '/projects/' + response.project.id +
+                          '/projects/' + response.project.slug +
                           '/buildlogs/' + response.log_id);
         })
         .catch(function(response) {
@@ -96,7 +96,7 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
         if (index != -1) {
             BuildLogImage.remove({
                 username: $routeParams.username,
-                project_id: $routeParams.project_id,
+                project: $routeParams.project,
                 log_id: $routeParams.log_id,
                 image_id: image.id
             }, angular.bind(this, function() {

@@ -4,10 +4,10 @@ var app = angular.module('buildlogs.images.factory', [
 
 app.factory('BuildLogImage', function BuildLogImage($resource, $http) {
     return $resource(
-        '/api/people/:username/projects/:project_id/buildlogs/:log_id/images/:image_id.json',
+        '/api/people/:username/projects/:project/buildlogs/:log_id/images/:image_id.json',
         {
             username: "@project.user",
-            project_id: "@project.id",
+            project: "@project.slug",
             log_id: "@log_id",
             image_id: "@image_id"
         },

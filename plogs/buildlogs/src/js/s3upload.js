@@ -2,7 +2,7 @@
 
   window.S3Upload = (function() {
 
-    S3Upload.prototype.project_id = '';
+    S3Upload.prototype.project = '';
 
     S3Upload.prototype.log_id = '';
 
@@ -67,7 +67,7 @@
       this_s3upload = this;
       xhr = new XMLHttpRequest();
       log_id = this.log_id || "";
-      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project_id=' + this.project_id + '&log_id=' + log_id, true);
+      xhr.open('GET', this.s3_sign_put_url + '?s3_object_type=' + file.type + '&project=' + this.project + '&log_id=' + log_id, true);
       xhr.overrideMimeType('text/plain; charset=x-user-defined');
       xhr.onreadystatechange = function(e) {
         var result;
