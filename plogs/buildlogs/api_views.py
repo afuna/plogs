@@ -35,7 +35,7 @@ class ActiveProjectViewSet(viewsets.ViewSet):
 
 class BuildLogViewSet(DetailSerializerMixin, NestedViewSetMixin, viewsets.ModelViewSet):
     permission_classes = [api_permissions.OwnerCanEditPermission]
-    queryset = models.BuildLog.objects.all().order_by('-date')
+    queryset = models.BuildLog.objects.all().order_by('-date', '-log_id')
     serializer_class = serializers.BuildLogSerializer
     serializer_detail_class = serializers.BuildLogDetailSerializer
     lookup_field = 'log_id'
