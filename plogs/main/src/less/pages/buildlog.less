@@ -4,17 +4,17 @@ figure {
     div {
         &:extend(.thumbnail);
         display: inline-block;
+    }
 
-        img {
-            &:extend(.img-responsive);
-            max-height: 90vh;
-        }
+    img {
+        &:extend(.img-responsive);
+        max-height: 90vh;
+    }
 
-        figcaption {
-            &:extend(.caption);
-            font-style: italic;
-            text-align: center;
-        }
+    figcaption {
+        &:extend(.caption);
+        font-style: italic;
+        text-align: center;
     }
 }
 
@@ -24,6 +24,7 @@ figure {
     align-items: baseline;
 
     figure {
+        &:extend(.thumbnail);
         max-width: initial;
         margin-bottom: 20px;
         position: relative;
