@@ -25,12 +25,19 @@
                 controllerAs: 'page'
             })
             .when(buildlogsPath + '/new', {
-                templateUrl: assetsRoot + '/buildlogs/views/buildlogs-form.html'
+                templateUrl: assetsRoot + '/buildlogs/views/buildlogs-form.html',
+                controller: 'BuildLogFormController',
+                controllerAs: 'buildlog'
             })
             .when(buildlogsPath + '/:log_id', {
                 templateUrl: assetsRoot + '/buildlogs/views/buildlogs-detail.html',
                 controller: 'BuildLogDetailController',
                 controllerAs: 'page'
+            })
+            .when(buildlogsPath + '/:log_id/edit', {
+                templateUrl: assetsRoot + '/buildlogs/views/buildlogs-form.html',
+                controller: 'BuildLogFormController',
+                controllerAs: 'buildlog'
             })
             .otherwise({
                 redirectTo: "/"

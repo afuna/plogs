@@ -18,3 +18,41 @@ figure {
     }
 }
 
+.buildlog-images {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+
+    figure {
+        max-width: initial;
+        margin-bottom: 20px;
+        position: relative;
+        transition: opacity 2s;
+
+        figcaption {
+            font-size: smaller;
+        }
+    }
+
+    button {
+        background-color: transparent;
+        border: none;
+        font-size: 2rem;
+        padding: 0 0 1rem 1rem;
+        color: @gray;
+        text-shadow: -1px 0 @gray-lighter, 0 -1px @gray-lighter;
+        position: absolute;
+        opacity: 0.8;
+        top: -5px;
+        right: -5px;
+    }
+
+    button:hover {
+        color: #000;
+        opacity: 1;
+    }
+
+    .removed {
+        opacity: 0;
+    }
+}

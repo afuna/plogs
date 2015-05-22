@@ -18,6 +18,12 @@ buildlogs_router = projects_router.register(
                         base_name='project-buildlogs',
                         parents_query_lookups=['project__plane__owner__username', 'project__id'])
 
+buildlogs_router.register(r'images',
+                          views.BuildLogImageViewSet,
+                          base_name='buildlog-images',
+                          parents_query_lookups=['build__project__plane__owner__username',
+                                                 'build__project__id', 'build__log_id'])
+
 people_router.register(r'categories',
                        views.CategoryViewSet,
                        base_name='user-categories',

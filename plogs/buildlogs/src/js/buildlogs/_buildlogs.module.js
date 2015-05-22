@@ -2,6 +2,7 @@ var app = angular.module('buildlogs', [
     'buildlogs.factory',
     'buildlogs.categories.factory',
     'buildlogs.partners.factory',
+    'buildlogs.images.factory',
     'buildlogs.controller',
     'buildlogDetail.controller',
     'buildlogForm.controller',
@@ -9,6 +10,7 @@ var app = angular.module('buildlogs', [
     'buildlogMetadata.directive',
     'buildlogText.directive',
     'buildlogImages.directive',
+    'stringToNumber.directive',
     'plogsUtils'
 ])
 .factory('buildlogsModuleAssets', function (assets) {

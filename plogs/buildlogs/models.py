@@ -112,6 +112,29 @@ class BuildLog(models.Model):
                            "username": self.project.plane.owner.username,
                        })
 
+    def save_image_info(self):
+        """
+        Given a buildlog, parse its notes text for images in markdown,
+        and save the corresponding caption/text in the matching BuildLogImage objects.
+        """
+        def callback(img):
+            # we don't know which image we're interested in
+            if "src" not in img:
+                return
+
+            # we don't have anything to save
+            if "caption" not in img and "alt" not in img:
+                return
+
+            image = BuildLogImage.objects.for_build(self).filter(url=img["src"]).first()
+            if image:
+                image.caption = img["caption"]
+                image.alt = img["alt"]
+                image.save()
+
+        return callback
+
+
     def save(self, *args, **kwargs):
         """ Custom save logic. We want to have a per-project log id (instead of per-table). """
         if self.log_id is None:
@@ -141,6 +164,7 @@ class BuildLogImage(models.Model):
     project = models.ForeignKey(Project)
     url = models.CharField(max_length=255)
     caption = models.CharField(max_length=255, blank=True)
+    alt = models.CharField(max_length=255, blank=True)
 
     # may have uploaded the image without having created the build yet
     build = models.ForeignKey(BuildLog, null=True, related_name='images')
@@ -150,8 +174,15 @@ class BuildLogImage(models.Model):
 
     objects = BuildLogImageManager()
 
+    class Meta:
+        ordering = ('id',)
+
     def __unicode__(self):
         return "%s (%s)" % (self.caption, self.url)
+
+    def owner(self):
+        return self.project.owner()
+
     def save(self, *args, **kwargs):
         """Custom save logic. We want to have a per-project image id (instead of per-table)"""
         if self.image_id is None:

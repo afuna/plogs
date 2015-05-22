@@ -3,11 +3,10 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
     return {
         restrict: 'E',
         require: 'ngModel',
-        scope: {},
         templateUrl: editorModuleAssets('partials/editor.tmpl.html'),
         controllerAs: 'editor',
         link: function(scope, element, attrs, controller) {
-            var textarea = element.find('textarea').get(0)
+            var textarea = element.find('textarea').get(0);
             var codemirror = CodeMirror.fromTextArea(textarea, {
                 mode: 'markdown',
                 lineWrapping: true,
@@ -26,6 +25,10 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
                 controller.$setViewValue(codemirror.getValue());
             });
 
+            // set the editor's initial value (if someone does a $broadcast)
+            scope.$on('editor.init', function(e, value) {
+                codemirror.setValue(value);
+            });
 
             // based on markdownify
             var insertions = {
@@ -62,21 +65,24 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
                     files: e.target.files || e.originalEvent.dataTransfer.files,
                     s3_sign_put_url: '/people/' + $routeParams.username + '/build/photo_upload_url/',
                     project_id: $routeParams.project_id,
-                    log_id: "",
+                    log_id: $routeParams.log_id,
                     onProgress: function(percent, message, filename) {
                     },
                     onStart: function(filename) {
                         codemirror.replaceSelection(upload_placeholder_text(filename));
                     },
-                    onFinishS3Put: function(url, filename) {
+                    onFinishS3Put: function(imageData, filename) {
                         var placeholder_text = upload_placeholder_text(filename);
                         var index = codemirror.getValue().indexOf(placeholder_text);
 
                         var pos_start = codemirror.posFromIndex(index);
                         var pos_end = codemirror.posFromIndex(index + placeholder_text.length);
 
-                        codemirror.replaceRange('![' + filename + '](' +  url +' "caption")\n',
+                        codemirror.replaceRange('![' + filename + '](' +  imageData.url +' "caption")\n',
                                                 pos_start, pos_end);
+
+                        var onUpload = scope.$eval(attrs.onUpload);
+                        scope.$apply(onUpload(imageData));
                     }
                 });
             }

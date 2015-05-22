@@ -1,11 +1,23 @@
 var app = angular.module('buildlogForm.controller', [
     'combobox.directive'
 ]);
-app.controller('BuildLogFormController', function BuildLogFormController($routeParams, $location, $filter, Category, Partner, BuildLog) {
+app.controller('BuildLogFormController', function BuildLogFormController($scope, $routeParams, $location, $filter,
+        Category, Partner, BuildLog, BuildLogImage) {
     this.form = {
         date: (new Date())
     };
 
+    if ( $routeParams.log_id ) {
+        BuildLog.get({
+            username: $routeParams.username,
+            project_id: $routeParams.project_id,
+            log_id: $routeParams.log_id
+        }).$promise
+            .then(angular.bind(this, function then(data) {
+                this.form = data;
+                $scope.$broadcast('editor.init', data.notes_edit);
+            }));
+    }
     this.categories = [];
     Category.query({
         username: $routeParams.username
@@ -50,15 +62,46 @@ app.controller('BuildLogFormController', function BuildLogFormController($routeP
         buildlog.project = {"user": $routeParams.username, "id": $routeParams.project_id};
         buildlog.date = $filter('date')(buildlog.date, "yyyy-MM-dd");
 
-        var newBuildLog = new BuildLog(buildlog);
-        newBuildLog.$save()
-        .then(function(response) {
+        var buildLogAPI = new BuildLog(buildlog);
+        var promise;
+        if (buildlog.log_id) {
+            // edit
+            promise = buildLogAPI.$update();
+        } else {
+            // create new
+            promise = buildLogAPI.$save();
+        }
+
+        promise.then(function(response) {
             $location.url('/people/' + response.project.user +
                           '/projects/' + response.project.id +
                           '/buildlogs/' + response.log_id);
         })
-        .catch(function() {
-            console.log("error saving buildlog");
+        .catch(function(response) {
+            console.log("error saving buildlog", response);
         })
+    };
+
+    this.addImage = function(imageList) {
+        return function(imageData) {
+            imageList.push(imageData);
+        }
+    };
+
+    this.deleteImage = function(event, image) {
+        event.preventDefault();
+        var index = this.form.images.indexOf(image);
+        image.removed = true;
+
+        if (index != -1) {
+            BuildLogImage.remove({
+                username: $routeParams.username,
+                project_id: $routeParams.project_id,
+                log_id: $routeParams.log_id,
+                image_id: image.id
+            }, angular.bind(this, function() {
+                this.form.images.splice(index, 1);
+            }));
+        }
     };
 });
