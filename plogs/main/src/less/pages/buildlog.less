@@ -1,17 +1,20 @@
 figure {
-    &:extend(.thumbnail);
-    max-width: 80%;
-    margin: 0 auto;
-    clear: right;
+    text-align: center;
 
-    img {
-        &:extend(.img-responsive);
-    }
+    div {
+        &:extend(.thumbnail);
+        display: inline-block;
 
-    figcaption {
-        &:extend(.caption);
-        font-style: italic;
-        text-align: center;
+        img {
+            &:extend(.img-responsive);
+            max-height: 90vh;
+        }
+
+        figcaption {
+            &:extend(.caption);
+            font-style: italic;
+            text-align: center;
+        }
     }
 }
 

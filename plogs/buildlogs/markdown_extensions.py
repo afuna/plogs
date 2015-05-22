@@ -19,8 +19,10 @@ class ImageFigurePattern(inlinepatterns.LinkPattern):
 
     def handleMatch(self, m):
         """ Return an img element with caption from the given match. """
-        wrapper = util.etree.Element("figure")
-        img = util.etree.SubElement(wrapper, "img")
+        figure = util.etree.Element("figure")
+        inner = util.etree.SubElement(figure, "div")
+
+        img = util.etree.SubElement(inner, "img")
         src_parts = m.group(9).split()
         if src_parts:
             src = src_parts[0]
@@ -29,7 +31,7 @@ class ImageFigurePattern(inlinepatterns.LinkPattern):
             img.set('src', '')
 
         if len(src_parts) > 1:
-            caption = util.etree.SubElement(wrapper, "figcaption")
+            caption = util.etree.SubElement(inner, "figcaption")
             caption.text = util.AtomicString(inlinepatterns.dequote(
                 self.unescape(" ".join(src_parts[1:]))
             ))
@@ -37,7 +39,7 @@ class ImageFigurePattern(inlinepatterns.LinkPattern):
         alt = m.group(2)
         img.set('alt', self.unescape(alt))
 
-        return wrapper
+        return figure
 
 def makeExtension(*args, **kwargs):
     return ImageFigureExtension(*args, **kwargs)
