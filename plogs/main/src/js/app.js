@@ -12,7 +12,7 @@
         'editor'
     ])
     .config(function ($routeProvider, assetsRoot) {
-        var buildlogsPath = '/people/:username/projects/:project_id/buildlogs'
+        var buildlogsPath = '/people/:username/projects/:project/buildlogs'
         $routeProvider
             .when("/", {
                 templateUrl: assetsRoot + '/main/views/index.html',

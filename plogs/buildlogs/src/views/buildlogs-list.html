@@ -1,7 +1,7 @@
 <div class="container">
 <breadcrumbs></breadcrumbs>
 <div class="page-header">
-    <h1 ng-cloak>{{page.project.name}} build logs <small ng-show="page.numBuildlogs > 0">{{page.numBuildlogs}} total</small></h1>
+    <h1 ng-cloak>{{page.project.slug}} build logs <small ng-show="page.numBuildlogs > 0">{{page.numBuildlogs}} total</small></h1>
 </div>
 <ul class="list-unstyled">
 <li ng-repeat="log in page.buildlogs">

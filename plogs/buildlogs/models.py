@@ -58,14 +58,30 @@ class Project(models.Model):
     plane = models.ForeignKey(Plane)
     date_started = models.DateField(auto_now_add=True)
 
+    user = models.ForeignKey(User, default=None)
+    slug = models.SlugField()
+
     objects = ProjectManager()
 
+    class Meta:
+        unique_together = ('user', 'slug')
+
     def owner(self):
-        """Return the user that owns this project."""
-        return self.plane.owner
+        return self.user
 
     def __unicode__(self):
-        return "%s" % self.plane
+        return "%s" % self.slug
+
+    def save(self, *args, **kwargs):
+        """
+        Additional logic when saving the project.
+        Sets the slug if not provided.
+        """
+        if self.slug is None:
+            self.slug = self.plane.kit.model
+        if self.user is None:
+            self.user = self.plane.owner
+        super(Project, self).save(*args, **kwargs)
 
 class BuildLogStatisticsManager(models.Manager):
     def for_project(self, project):

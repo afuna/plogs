@@ -4,21 +4,21 @@ app.factory('ProjectFactory', function ProjectFactory($q, $http) {
 
     var projects = {};
     function cacheProject(project) {
-        projects[project.user + "/" + project.id] = project;
+        projects[project.user + "/" + project.slug] = project;
     }
-    function getCachedProject(username, project_id) {
-        return projects[username + "/" + project_id];
+    function getCachedProject(username, project) {
+        return projects[username + "/" + project];
     }
 
     // for the project, we can afford to use the cached copy
-    exports.getProject = function(username, project_id) {
+    exports.getProject = function(username, project_slug) {
         var deferred = $q.defer();
 
-        var project = getCachedProject(username, project_id);
+        var project = getCachedProject(username, project_slug);
         if (project) {
             deferred.resolve(project);
         } else {
-            $http.get('/api/people/'+username+'/projects/'+project_id+'.json')
+            $http.get('/api/people/'+username+'/projects/'+project_slug+'.json')
                 .then(function(response) {
                     cacheProject(response.data);
                     deferred.resolve(response.data);

@@ -4,10 +4,10 @@ var app = angular.module('buildlogs.factory', [
 
 app.factory('BuildLog', function BuildLog($resource, $http) {
     return $resource(
-        '/api/people/:username/projects/:project_id/buildlogs/:log_id.json',
+        '/api/people/:username/projects/:project/buildlogs/:log_id.json',
         {
             username: "@project.user",
-            project_id: "@project.id",
+            project: "@project.slug",
             log_id: "@log_id",
         },
         {

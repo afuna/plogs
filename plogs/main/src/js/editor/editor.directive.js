@@ -64,7 +64,7 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
                 var s3upload = new S3Upload({
                     files: e.target.files || e.originalEvent.dataTransfer.files,
                     s3_sign_put_url: '/people/' + $routeParams.username + '/build/photo_upload_url/',
-                    project_id: $routeParams.project_id,
+                    project: $routeParams.project,
                     log_id: $routeParams.log_id,
                     onProgress: function(percent, message, filename) {
                     },
