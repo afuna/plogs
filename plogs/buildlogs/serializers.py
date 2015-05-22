@@ -126,7 +126,7 @@ class BuildLogDetailSerializer(BuildLogSerializer):
     """
 
     images = BuildLogImageSerializer(many=True, read_only=True)
-    notes = MarkdownField(required=False)
+    notes = MarkdownField(required=False, allow_blank=True)
     notes_edit = serializers.SerializerMethodField()
 
     class Meta(BuildLogSerializer.Meta):
