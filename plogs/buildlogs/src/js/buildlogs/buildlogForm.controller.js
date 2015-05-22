@@ -84,7 +84,6 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
 
     this.addImage = function(imageList) {
         return function(imageData) {
-            imageData.id = 0;
             imageList.push(imageData);
         }
     };
@@ -92,6 +91,8 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
     this.deleteImage = function(event, image) {
         event.preventDefault();
         var index = this.form.images.indexOf(image);
+        image.removed = true;
+
         if (index != -1) {
             BuildLogImage.remove({
                 username: $routeParams.username,

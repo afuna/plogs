@@ -14,8 +14,8 @@
       return console.log('base.onStart()', filename)
     };
 
-    S3Upload.prototype.onFinishS3Put = function(public_url) {
-      return console.log('base.onFinishS3Put()', public_url);
+    S3Upload.prototype.onFinishS3Put = function(imageData, filename) {
+      return console.log('base.onFinishS3Put()', imageData, filename);
     };
 
     S3Upload.prototype.onProgress = function(percent, status, filename) {
@@ -78,7 +78,7 @@
             this_s3upload.onError('Signing server returned some ugly/empty JSON: "' + this.responseText + '"');
             return false;
           }
-          return callback(result.signed_request, result.url);
+          return callback(result.signed_request, result.image);
         } else if (this.readyState === 4 && this.status !== 200) {
           return this_s3upload.onError('Could not contact request signing server. Status = ' + this.status);
         }
@@ -86,7 +86,7 @@
       return xhr.send();
     };
 
-    S3Upload.prototype.uploadToS3 = function(file, url, public_url) {
+    S3Upload.prototype.uploadToS3 = function(file, url, imageData) {
       var this_s3upload, xhr;
       this_s3upload = this;
       xhr = this.createCORSRequest('PUT', url);
@@ -96,12 +96,13 @@
         xhr.onload = function() {
           if (xhr.status === 200) {
             this_s3upload.onProgress(100, 'Upload completed.', file.name);
-            return this_s3upload.onFinishS3Put(public_url, file.name);
+            return this_s3upload.onFinishS3Put(imageData, file.name);
           } else {
             return this_s3upload.onError('Upload error: ' + xhr.status);
           }
         };
         xhr.onerror = function() {
+          return this_s3upload.onFinishS3Put(imageData, file.name);
           return this_s3upload.onError('XHR error.');
         };
         xhr.upload.onprogress = function(e) {
@@ -120,8 +121,8 @@
     S3Upload.prototype.uploadFile = function(file) {
       var this_s3upload;
       this_s3upload = this;
-      return this.executeOnSignedUrl(file, function(signedURL, publicURL) {
-        return this_s3upload.uploadToS3(file, signedURL, publicURL);
+      return this.executeOnSignedUrl(file, function(signedURL, imageData) {
+        return this_s3upload.uploadToS3(file, signedURL, imageData);
       });
     };
 

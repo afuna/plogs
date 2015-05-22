@@ -71,18 +71,18 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
                     onStart: function(filename) {
                         codemirror.replaceSelection(upload_placeholder_text(filename));
                     },
-                    onFinishS3Put: function(url, filename) {
+                    onFinishS3Put: function(imageData, filename) {
                         var placeholder_text = upload_placeholder_text(filename);
                         var index = codemirror.getValue().indexOf(placeholder_text);
 
                         var pos_start = codemirror.posFromIndex(index);
                         var pos_end = codemirror.posFromIndex(index + placeholder_text.length);
 
-                        codemirror.replaceRange('![' + filename + '](' +  url +' "caption")\n',
+                        codemirror.replaceRange('![' + filename + '](' +  imageData.url +' "caption")\n',
                                                 pos_start, pos_end);
 
                         var onUpload = scope.$eval(attrs.onUpload);
-                        scope.$apply(onUpload({url: url, alt: filename}));
+                        scope.$apply(onUpload(imageData));
                     }
                 });
             }

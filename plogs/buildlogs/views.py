@@ -177,6 +177,11 @@ def photo_upload_url(request, *args, **kwargs):
 
     response = json.dumps({
         'signed_request': '%s?AWSAccessKeyId=%s&Expires=%d&Signature=%s' % (url, AWS_ACCESS_KEY, expires, signature),
-         'url': url
+         'image': {
+            "alt": image.alt,
+            "caption": image.caption,
+            "url": image.url,
+            "id": image.id
+         }
       })
     return HttpResponse(response)
