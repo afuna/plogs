@@ -4,7 +4,8 @@ var app = angular.module('buildlogForm.controller', [
 app.controller('BuildLogFormController', function BuildLogFormController($scope, $routeParams, $location, $filter,
         Category, Partner, BuildLog, BuildLogImage) {
     this.form = {
-        date: (new Date())
+        date: (new Date()),
+        images: []
     };
 
     if ( $routeParams.log_id ) {
