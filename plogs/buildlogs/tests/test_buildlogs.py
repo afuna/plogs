@@ -6,9 +6,11 @@ from datetime import date
 
 class BuildLogTestCase(TestCase):
     @classmethod
-    def create_project(cls, name="kit"):
-        cls.user_count = 0
-        kit = Kit.objects.create(model=name)
+    def create_project(cls, name=u"kit"):
+        if not hasattr(cls, 'user_count'):
+            cls.user_count = 0
+
+        kit = Kit.objects.create(model=u"%s %s" % (name, cls.user_count))
         engine = Engine.objects.create()
         prop = Prop.objects.create()
         user, _ = User.objects.get_or_create(username=str(cls.user_count))
@@ -24,7 +26,7 @@ class BuildLogTestCase(TestCase):
     @classmethod
     def create_buildlog(cls):
         project = BuildLogTestCase.create_project()
-        category, _ = Category.objects.get_or_create(name="category", user=project.plane.owner)
+        category, _ = Category.objects.get_or_create(name=u"category", user=project.plane.owner)
 
         buildlog = BuildLog.objects.create(
             project = project,
@@ -55,19 +57,19 @@ class BuildLogTestCase(TestCase):
     def test_statistics(self):
         project = BuildLogTestCase.create_project()
         stats = BuildLog.statistics.for_project(project)
-        self.assertEqual(stats["hours"], None)
+        self.assertEqual(stats["hours"], 0)
         self.assertEqual(stats["sessions"], 0)
         self.assertEqual(stats["dollars"], 0)
 
         BuildLog.objects.create(
             project = project,
-            category = Category.objects.create(name="a", user=project.plane.owner),
+            category = Category.objects.create(name=u"a", user=project.plane.owner),
             date = date.today(),
             duration = 3.5,
         )
         BuildLog.objects.create(
             project = project,
-            category = Category.objects.create(name="b", user=project.plane.owner),
+            category = Category.objects.create(name=u"b", user=project.plane.owner),
             date = date.today(),
             duration = 1.25,
         )
@@ -78,9 +80,11 @@ class BuildLogTestCase(TestCase):
 
 class BuildLogImageTestCase(TestCase):
     @classmethod
-    def create_project(cls, name="kit"):
-        cls.user_count = 0
-        kit = Kit.objects.create(model=name)
+    def create_project(cls, name=u"kit"):
+        if not hasattr(cls, 'user_count'):
+            cls.user_count = 0
+
+        kit = Kit.objects.create(model=u"%s %s" % (name, cls.user_count))
         engine = Engine.objects.create()
         prop = Prop.objects.create()
         user, _ = User.objects.get_or_create(username=str(cls.user_count))
@@ -96,7 +100,7 @@ class BuildLogImageTestCase(TestCase):
     @classmethod
     def create_buildlog(cls):
         project = BuildLogTestCase.create_project()
-        category, _ = Category.objects.get_or_create(name="category", user=project.plane.owner)
+        category, _ = Category.objects.get_or_create(name=u"category", user=project.plane.owner)
 
         buildlog = BuildLog.objects.create(
             project = project,

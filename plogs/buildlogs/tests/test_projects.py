@@ -6,7 +6,7 @@ from datetime import date
 
 class ProjectTestCase(TestCase):
     def setUp(self):
-        kit = Kit.objects.create(model="kit")
+        kit = Kit.objects.create(model=u"kit")
         engine = Engine.objects.create()
         prop = Prop.objects.create()
         user = User.objects.create()
@@ -25,7 +25,7 @@ class ProjectTestCase(TestCase):
 
 class ProjectListTestCase(TestCase):
     @classmethod
-    def create_plane(cls, name="kit", username="username"):
+    def create_plane(cls, name=u"kit", username=u"username"):
         kit = Kit.objects.create(model=name)
         engine = Engine.objects.create()
         prop = Prop.objects.create()
@@ -38,9 +38,9 @@ class ProjectListTestCase(TestCase):
         return plane
 
     def setUp(self):
-        plane1 = ProjectListTestCase.create_plane(name="kit1", username="1")
-        plane2 = ProjectListTestCase.create_plane(name="kit1", username="2")
-        plane3 = ProjectListTestCase.create_plane(name="kit2", username="2")
+        plane1 = ProjectListTestCase.create_plane(name=u"kit1", username=u"1")
+        plane2 = ProjectListTestCase.create_plane(name=u"kit1", username=u"2")
+        plane3 = ProjectListTestCase.create_plane(name=u"kit2", username=u"2")
 
         Project.objects.create(plane=plane1)
         Project.objects.create(plane=plane2)
@@ -63,7 +63,7 @@ class ProjectListTestCase(TestCase):
         """Test fetching a specific project by name"""
         project1, project2, project3 = Project.objects.all().order_by("id")
 
-        named_project = Project.objects.for_user(user=project2.plane.owner, project_name="kit1")
+        named_project = Project.objects.for_user(user=project2.plane.owner, project_name=u"kit1")
         self.assertEqual(len(named_project), 1)
         self.assertEqual(named_project.first().plane.owner, project2.plane.owner)
         self.assertEqual(str(named_project.first()), "kit1")
