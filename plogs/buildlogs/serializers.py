@@ -10,6 +10,7 @@ from .markdown_extensions import ImageProcessingExtension
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    name = serializers.ReadOnlyField(source='plane.kit.model')
 
     # resource urls
     api_url = serializers.SerializerMethodField()
@@ -17,7 +18,7 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Project
-        fields = ('id', 'slug', 'date_started', 'user', 'api_url', 'buildlogs_url')
+        fields = ('id', 'slug', 'name', 'date_started', 'user', 'api_url', 'buildlogs_url')
         validators = []
 
     def get_api_url(self, obj):
