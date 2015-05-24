@@ -1,5 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.db import models
+from django.utils.text import slugify
 from django.contrib.auth.models import User
 from plogs.planes.models import Plane
 
@@ -77,10 +78,14 @@ class Project(models.Model):
         Additional logic when saving the project.
         Sets the slug if not provided.
         """
-        if self.slug is None:
-            self.slug = self.plane.kit.model
-        if self.user is None:
+
+        if self.slug is None or self.slug == '':
+            self.slug = slugify(self.plane.kit.model)
+
+        # RelatedObjectDoesNotExist error if we try to access self.user
+        if not hasattr(self, "user"):
             self.user = self.plane.owner
+
         super(Project, self).save(*args, **kwargs)
 
 class BuildLogStatisticsManager(models.Manager):
