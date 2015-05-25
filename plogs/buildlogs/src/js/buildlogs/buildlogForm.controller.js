@@ -74,6 +74,7 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
         }
 
         promise.then(function(response) {
+            $scope.$broadcast('editor.saved');
             $location.url('/people/' + response.project.user +
                           '/projects/' + response.project.slug +
                           '/buildlogs/' + response.log_id);

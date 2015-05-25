@@ -1,5 +1,5 @@
 var app = angular.module('editor.directive', []);
-app.directive('editor', function (editorModuleAssets, $routeParams) {
+app.directive('editor', function (editorModuleAssets, $routeParams, $timeout) {
     return {
         restrict: 'E',
         require: 'ngModel',
@@ -20,14 +20,49 @@ app.directive('editor', function (editorModuleAssets, $routeParams) {
             // style the markdown editor to look like a textarea
             codemirror.display.wrapper.classList.add("form-control");
 
-            // update the ng-model value with editor's current contents
-            codemirror.on('change', function() {
-                controller.$setViewValue(codemirror.getValue());
-            });
+            // save draft, in case of closing tab, etc
+            var timeout = null;
+            var cacheKey = $routeParams.username+"/"+$routeParams.project+"/"+($routeParams.log_id||"new");
+            var saveDraft = function() {
+                localStorage[cacheKey] = codemirror.getValue();
+            };
 
+            var debounceSaveDraft = function() {
+                controller.$setViewValue(codemirror.getValue());
+
+                if (timeout) {
+                    $timeout.cancel(timeout);
+                }
+                timeout = $timeout(saveDraft, 500);
+            };
+
+            var restoreDraft = function () {
+                var cachedText = localStorage[cacheKey];
+                if (cachedText) {
+                    codemirror.setValue(cachedText);
+                    return true;
+                }
+                return false;
+            };
+
+            // update the ng-model value with editor's current contents
+            codemirror.on('change', debounceSaveDraft);
+
+            // restore any saved draft
+            restoreDraft();
+
+            // TODO: these two events are weird; feels like a better fit for a service
             // set the editor's initial value (if someone does a $broadcast)
             scope.$on('editor.init', function(e, value) {
-                codemirror.setValue(value);
+                var restored = restoreDraft();
+                if (!restored) {
+                    codemirror.setValue(value);
+                }
+            });
+
+            // clear the cached values when we're done with the editor
+            scope.$on('editor.saved', function() {
+                delete localStorage[cacheKey];
             });
 
             // based on markdownify
