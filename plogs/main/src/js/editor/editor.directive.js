@@ -123,7 +123,7 @@ app.directive('editor', function (editorModuleAssets, $routeParams, $timeout) {
             }
 
             $("#image_upload").change(s3_upload);
-            $(codemirror.display.scroller)
+            $("body")
                 .on("drop", s3_upload)
                 .on("drop dragover dragleave", function(e) {
                     e.preventDefault();
