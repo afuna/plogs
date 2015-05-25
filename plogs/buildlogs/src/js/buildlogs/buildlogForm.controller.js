@@ -90,8 +90,11 @@ app.controller('BuildLogFormController', function BuildLogFormController($scope,
         }
     };
 
-    this.deleteImage = function(event, image) {
-        event.preventDefault();
+    this.insertImage = function(image) {
+        $scope.$broadcast('editor.insertImage', image);;
+    };
+
+    this.deleteImage = function(image) {
         var index = this.form.images.indexOf(image);
         image.removed = true;
 

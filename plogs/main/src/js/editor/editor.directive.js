@@ -60,6 +60,10 @@ app.directive('editor', function (editorModuleAssets, $routeParams, $timeout) {
                 }
             });
 
+            scope.$on('editor.insertImage', function(e, image) {
+                codemirror.replaceSelection('![' + image.alt + '](' +  image.url +' "' + image.caption +'")\n');
+            });
+
             // clear the cached values when we're done with the editor
             scope.$on('editor.saved', function() {
                 delete localStorage[cacheKey];

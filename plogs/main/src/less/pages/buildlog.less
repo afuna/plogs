@@ -41,12 +41,28 @@ figure {
         border-radius: 50%;
         color: @gray;
         position: absolute;
-        opacity: 0.5;
-        top: 5px;
-        right: 5px;
         height: 2rem;
         width: 2rem;
+        transition: opacity 1s;
         box-shadow: 0 0 1px #000;
+    }
+
+    button.button-delete {
+        top: 5px;
+        right: 5px;
+        opacity: 0.5;
+    }
+
+    button.button-insert {
+        top: 5px;
+        left: 5px;
+        opacity: 0.2;
+    }
+
+    figure:hover {
+        button {
+            opacity: 1;
+        }
     }
 
     button:hover {
