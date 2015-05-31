@@ -55,6 +55,12 @@ INTERNAL_IPS = []
 if DEBUG:
     INTERNAL_IPS = [ '127.0.0.1' ]
 
+# Allow all host headers
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['planelogs.herokuapp.com']
+
 # Database configuration
 import dj_database_url
 DATABASES = {
@@ -72,9 +78,6 @@ if os.environ.get('DATABASE_URL'):
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Allow all host headers
-ALLOWED_HOSTS = ['*']
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 STATIC_ROOT = 'staticfiles'
