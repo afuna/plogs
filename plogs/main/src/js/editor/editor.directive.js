@@ -106,19 +106,23 @@ app.directive('editor', function (editorModuleAssets, $routeParams, $timeout) {
                     deferreds.push(deferred);
 
                     var image = images[i];
-
-                    // creates side-effect of fixing orientation
-                    loadImage(image, function(deferred, image) {
-                        return function(canvas) {
-                            canvas.toBlob(function(blob) {
-                                formData.append('images', blob, image.name);
-                                deferred.resolve();
-                            },
-                            image.type
-                            );
+                    loadImage.parseMetaData(
+                        image,
+                        function(data) {
+                            var orientation = data.exif.get('Orientation');
+                            loadImage(image, function(deferred, image) {
+                                return function(canvas) {
+                                    canvas.toBlob(function(blob) {
+                                        formData.append('images', blob, image.name);
+                                        deferred.resolve();
+                                    },
+                                    image.type
+                                    );
+                                }
+                            }(deferred, image),
+                            { orientation: orientation, canvas: true });
                         }
-                    }(deferred, image),
-                    { orientation: true });
+                    );
                 }
                 return deferreds;
             }
