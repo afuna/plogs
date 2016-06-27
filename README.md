@@ -9,9 +9,10 @@ Make sure you have npm and grunt-cli installed. Then do:
 If you make any modifications to JS/CSS, then run:
 
     grunt dist
+    python manage.py collectstatic --noinput
 
 
 Server
 -------
 
-    python manage.py runserver
+    heroku local

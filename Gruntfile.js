@@ -54,7 +54,8 @@ module.exports = function(grunt) {
                               'bootstrap/dist/fonts/*', 'angular*/angular*.js', 'angular-ui-select/dist/*',
                               'angular-strap/dist/**', 'marked/marked.min.js',
                               'CodeMirror/lib/*', 'CodeMirror/addon/edit/continuelist.js',
-                              'CodeMirror/mode/xml/xml.js', 'CodeMirror/mode/markdown/markdown.js'],
+                              'CodeMirror/mode/xml/xml.js', 'CodeMirror/mode/markdown/markdown.js',
+                              'blueimp-load-image/js/load-image.all.min.js'],
                         dest: '<%= vendor_assets %>'
                     }
                 ]
@@ -63,7 +64,7 @@ module.exports = function(grunt) {
                 expand: true,
                 cwd: '<%= vendor_assets %>',
                 src: ['bootstrap/dist/js/*', 'jquery/dist/*', 'angular*/angular*.js', 'angular-ui-select/dist/*',
-                      'angular-strap/dist/**', 'CodeMirror/**', 'marked/*'],
+                      'angular-strap/dist/**', 'CodeMirror/**', 'marked/*', 'blueimp-load-image/js/load-image.all.min.js'],
                 dest: '<%= compiled_assets %>/vendor'
             },
             appjs: {

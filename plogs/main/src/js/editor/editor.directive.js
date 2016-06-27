@@ -99,30 +99,49 @@ app.directive('editor', function (editorModuleAssets, $routeParams, $timeout) {
                 return "![Uploading " + filename + "]()\n";
             }
 
+            function fixImageOrientation(images) {
+                var deferreds = [];
+                for (var i = 0; i < images.length; i++) {
+                    var deferred = new $.Deferred();
+                    deferreds.push(deferred);
+
+                    // creates side-effect of fixing orientation
+                    loadImage(images[i], function(deferred) {
+                        return function(_correctedImage) {deferred.resolve();}
+                    }(deferred),
+                    { orientation: true });
+                }
+                return deferreds;
+            }
+
             function s3_upload(e){
-                var s3upload = new S3Upload({
-                    files: e.target.files || e.originalEvent.dataTransfer.files,
-                    s3_sign_put_url: '/people/' + $routeParams.username + '/build/photo_upload_url/',
-                    project: $routeParams.project,
-                    log_id: $routeParams.log_id,
-                    onProgress: function(percent, message, filename) {
-                    },
-                    onStart: function(filename) {
-                        codemirror.replaceSelection(upload_placeholder_text(filename));
-                    },
-                    onFinishS3Put: function(imageData, filename) {
-                        var placeholder_text = upload_placeholder_text(filename);
-                        var index = codemirror.getValue().indexOf(placeholder_text);
+                var fixedImagesDeferreds = fixImageOrientation(e.target.files || e.originalEvent.dataTransfer.files);
+                $.when.apply($, fixedImagesDeferreds).then(function(fixedImages) {
+                    // after fixing all images, we upload them all to s3
+                    var s3upload = new S3Upload({
+                        files: (e.target.files || e.originalEvent.dataTransfer.files),
+                        s3_sign_put_url: '/people/' + $routeParams.username + '/build/photo_upload_url/',
+                        project: $routeParams.project,
+                        log_id: $routeParams.log_id,
+                        onProgress: function(percent, message, filename) {
+                        },
+                        onStart: function(filename) {
+                            codemirror.replaceSelection(upload_placeholder_text(filename));
+                        },
+                        onFinishS3Put: function(imageData, filename) {
+                            var placeholder_text = upload_placeholder_text(filename);
+                            var index = codemirror.getValue().indexOf(placeholder_text);
 
-                        var pos_start = codemirror.posFromIndex(index);
-                        var pos_end = codemirror.posFromIndex(index + placeholder_text.length);
+                            var pos_start = codemirror.posFromIndex(index);
+                            var pos_end = codemirror.posFromIndex(index + placeholder_text.length);
 
-                        codemirror.replaceRange('![' + filename + '](' +  imageData.url +' "caption")\n',
-                                                pos_start, pos_end);
+                            codemirror.replaceRange('![' + filename + '](' +  imageData.url +' "caption")\n',
+                                                    pos_start, pos_end);
 
-                        var onUpload = scope.$eval(attrs.onUpload);
-                        scope.$apply(onUpload(imageData));
-                    }
+                            var onUpload = scope.$eval(attrs.onUpload);
+                            scope.$apply(onUpload(imageData));
+                        }
+                    });
                 });
             }
 
