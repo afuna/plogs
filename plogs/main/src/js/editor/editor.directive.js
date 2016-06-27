@@ -99,27 +99,37 @@ app.directive('editor', function (editorModuleAssets, $routeParams, $timeout) {
                 return "![Uploading " + filename + "]()\n";
             }
 
-            function fixImageOrientation(images) {
+            function fixImageOrientation(images, formData) {
                 var deferreds = [];
                 for (var i = 0; i < images.length; i++) {
                     var deferred = new $.Deferred();
                     deferreds.push(deferred);
 
+                    var image = images[i];
+
                     // creates side-effect of fixing orientation
-                    loadImage(images[i], function(deferred) {
-                        return function(_correctedImage) {deferred.resolve();}
-                    }(deferred),
+                    loadImage(image, function(deferred, image) {
+                        return function(canvas) {
+                            canvas.toBlob(function(blob) {
+                                formData.append('images', blob, image.name);
+                                deferred.resolve();
+                            },
+                            image.type
+                            );
+                        }
+                    }(deferred, image),
                     { orientation: true });
                 }
                 return deferreds;
             }
 
             function s3_upload(e){
-                var fixedImagesDeferreds = fixImageOrientation(e.target.files || e.originalEvent.dataTransfer.files);
-                $.when.apply($, fixedImagesDeferreds).then(function(fixedImages) {
+                var formData = new FormData();
+                var fixedImagesDeferreds = fixImageOrientation(e.target.files || e.originalEvent.dataTransfer.files, formData);
+                $.when.apply($, fixedImagesDeferreds).then(function() {
                     // after fixing all images, we upload them all to s3
                     var s3upload = new S3Upload({
-                        files: (e.target.files || e.originalEvent.dataTransfer.files),
+                        files: formData.getAll('images'),
                         s3_sign_put_url: '/people/' + $routeParams.username + '/build/photo_upload_url/',
                         project: $routeParams.project,
                         log_id: $routeParams.log_id,
